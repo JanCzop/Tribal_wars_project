@@ -28,6 +28,12 @@ public class Village_controller {
                 .header("Village created successfully.")
                 .body(this.village_service.save_village(village));
     }
+    @GetMapping("/{x}/{y}/update")
+    public ResponseEntity<Village> update_village_state(@PathVariable Integer x, @PathVariable Integer y){
+        System.out.println("im here");
+        village_service.update_village_state(village_service.get_village_by_id(new Coordinates(x,y)));
+        return null;
+    }
     @GetMapping("/{x}/{y}")
     public ResponseEntity<Village> get_village_by_id(@PathVariable Integer x, @PathVariable Integer y){
         return this.village_service.get_village_by_id(new Coordinates(x,y))

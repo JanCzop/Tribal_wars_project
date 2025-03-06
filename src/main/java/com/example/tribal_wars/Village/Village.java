@@ -36,7 +36,13 @@ public class Village {
     private Map<Building, Integer> buildings;
      */
 
+    @Embedded
+    @Getter @Setter
+    private Village_buildings_level buildings;
 
+    @Embedded
+    @Getter @Setter
+    private Village_resources resources;
 
     @Embedded
     @Getter @Setter

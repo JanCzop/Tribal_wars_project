@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @Getter @Setter
 public class Construction {
     @Enumerated(EnumType.STRING)
-    private Building_types building_types;
-    private Integer target_level;
-    private LocalDateTime start_time;
-    private LocalDateTime end_time;
+    private Building_types construction_building_type;
+    private Integer construction_target_level;
+    private LocalDateTime construction_start_time;
+    private LocalDateTime construction_end_time;
 }

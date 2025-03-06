@@ -1,5 +1,6 @@
 package com.example.tribal_wars.Village;
 
+import com.example.tribal_wars.Game_service.Resources_service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,10 +10,13 @@ import java.util.Optional;
 @Service
 public class Village_service {
     private final Village_repository village_repository;
+    private final Resources_service resources_service;
     @Autowired
-    public Village_service(Village_repository village_repository) {
+    public Village_service(Village_repository village_repository, Resources_service resources_service) {
         this.village_repository = village_repository;
+        this.resources_service = resources_service;
     }
+
 
     public Village save_village(Village village){
         return village_repository.save(village);
@@ -25,5 +29,13 @@ public class Village_service {
     }
     public List<Village> get_all_villages(){
         return village_repository.findAll();
+    }
+    public Optional<Village> update_village_state(Optional<Village> village){
+        resources_service.update_village_current_resource_state(village);
+        if(!village.isEmpty()) {
+
+        }
+        return null;
+
     }
 }

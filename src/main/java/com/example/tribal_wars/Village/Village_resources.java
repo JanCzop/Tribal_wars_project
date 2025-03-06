@@ -6,23 +6,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
-public class Resources_overlay {
-    public enum Resource {
-        WOOD, STONE, IRON, GOLD
-    }
+public class Village_resources {
 
     private int current_wood;
     private int current_stone;
     private int current_iron;
     private int current_gold;
-
     private int resources_capacity;
-    private int cache;
+    private int cache_capacity;
     private int gold_capacity;
+    private LocalDateTime resource_last_update;
 
 
 }

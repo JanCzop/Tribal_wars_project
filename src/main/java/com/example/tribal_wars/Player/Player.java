@@ -27,7 +27,7 @@ public class Player {
         this.password = new BCryptPasswordEncoder().encode(raw_password);
     }
 
-    @OneToMany(mappedBy = "player_owner", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
     @Getter @Setter
     private List<Village> villages;
 
