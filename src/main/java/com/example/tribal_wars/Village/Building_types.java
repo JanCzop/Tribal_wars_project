@@ -1,8 +1,8 @@
-package com.example.tribal_wars.Village.Buildings;
+package com.example.tribal_wars.Village;
 
 import lombok.Getter;
 
-public enum Building {
+public enum Building_types {
     TEST_DEFAULT_BUILDING,
     TEST_CONCRETE_BUILDING(100,200,250,20)
     ;
@@ -17,14 +17,14 @@ public enum Building {
     @Getter
     private final int build_time;
 
-    Building(int wood_cost, int stone_cost, int iron_cost, int build_time) {
+    Building_types(int wood_cost, int stone_cost, int iron_cost, int build_time) {
         this.wood_cost = wood_cost;
         this.stone_cost = stone_cost;
         this.iron_cost = iron_cost;
         this.build_time = build_time;
     }
 
-    Building() {
+    Building_types() {
         this.wood_cost = DEFAULT_COST;
         this.stone_cost = DEFAULT_COST;
         this.iron_cost = DEFAULT_COST;

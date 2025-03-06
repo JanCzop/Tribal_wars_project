@@ -1,33 +1,45 @@
 package com.example.tribal_wars.Village;
 
 import com.example.tribal_wars.Player.Player;
-import com.example.tribal_wars.Village.Buildings.Building;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Map;
-
 @Entity
 @NoArgsConstructor
 public class Village {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EmbeddedId
     @Getter
-    private Long id;
+    private Coordinates coordinates;
 
     @ManyToOne
     @JoinColumn(name = "player_id")
+    @JsonBackReference
     @Getter @Setter
-    private Player player_owner;
+    private Player player;
 
+    /* LEGACY BUILDINGS MAP;
     @ElementCollection
-    @CollectionTable(name = "village_buildings", joinColumns = @JoinColumn(name = "village_id"))
+    @CollectionTable(
+            name = "village_buildings",
+            joinColumns = {
+                    @JoinColumn(name = "village_x", referencedColumnName = "x"),
+                    @JoinColumn(name = "village_y", referencedColumnName = "y")
+            }
+    )
     @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name = "building")
     @Column(name = "level")
     @Getter @Setter
     private Map<Building, Integer> buildings;
+     */
+
+
+
+    @Embedded
+    @Getter @Setter
+    private Construction construction;
 
 }

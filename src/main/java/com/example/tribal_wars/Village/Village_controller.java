@@ -1,5 +1,7 @@
 package com.example.tribal_wars.Village;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,15 +22,15 @@ public class Village_controller {
 
     @PostMapping
     public ResponseEntity<Village> create_village(@RequestBody Village village){
-        village.setPlayer_owner(null); // TODO: CREATE CONCRETE EXCEPTION HANDLERS
+        //village.setPlayer_owner(null); // TODO: CREATE CONCRETE EXCEPTION HANDLERS
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .header("Village created successfully.")
                 .body(this.village_service.save_village(village));
     }
-    @GetMapping("/{id}")
-    public ResponseEntity<Village> get_village_by_id(@PathVariable Long id){
-        return this.village_service.get_village_by_id(id)
+    @GetMapping("/{x}/{y}")
+    public ResponseEntity<Village> get_village_by_id(@PathVariable Integer x, @PathVariable Integer y){
+        return this.village_service.get_village_by_id(new Coordinates(x,y))
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 
@@ -47,15 +49,16 @@ public class Village_controller {
                 .header(header,String.valueOf(villages.size()))
                 .body(villages);
     }
-    @PutMapping("/{id}")
-    public ResponseEntity<Village> update_village(@PathVariable Long id, @RequestBody Village village){
-        if(!id.equals(village.getId()))
+    @PutMapping("/{x}/{y}")
+    public ResponseEntity<Village> update_village(@PathVariable Integer x, @PathVariable Integer y, @RequestBody Village village){
+        Coordinates coordinates = new Coordinates(x,y);
+        if(!coordinates.equals(village.getCoordinates()))
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .header("Param ID does not match Body")
                     .build();
         else{
-            Optional<Village> retrieved_village = this.village_service.get_village_by_id(id);
+            Optional<Village> retrieved_village = this.village_service.get_village_by_id(coordinates);
             return retrieved_village
                     .map(existing_village -> {
                         //existing_village.setPlayer_id(village.getPlayer_id());
@@ -66,13 +69,13 @@ public class Village_controller {
                     })
                     .orElseGet(() -> ResponseEntity
                             .status(HttpStatus.NOT_FOUND)
-                            .header("Village with ID " + id + " not found.")
+                            .header("Village with ID " + x + "/" + y + " not found.")
                             .build());
         }
     }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete_village(@PathVariable Long id){
-        this.village_service.delete_village(id);
+    @DeleteMapping("/{x}/{y}")
+    public ResponseEntity<Void> delete_village(@PathVariable Integer x, @PathVariable Integer y){
+        this.village_service.delete_village(new Coordinates(x,y));
         return ResponseEntity.noContent().build();
     }
 }

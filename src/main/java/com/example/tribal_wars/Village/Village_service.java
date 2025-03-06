@@ -17,10 +17,10 @@ public class Village_service {
     public Village save_village(Village village){
         return village_repository.save(village);
     }
-    public void delete_village(Long id){
+    public void delete_village(Coordinates id){
         village_repository.deleteById(id);
     }
-    public Optional<Village> get_village_by_id(Long id){
+    public Optional<Village> get_village_by_id(Coordinates id){
         return village_repository.findById(id);
     }
     public List<Village> get_all_villages(){
