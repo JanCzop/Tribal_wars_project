@@ -10,6 +10,10 @@ import lombok.Setter;
 @Entity
 @NoArgsConstructor
 public class Village {
+    public Village(Coordinates coordinates){
+        this.coordinates = coordinates;
+    }
+
     @EmbeddedId
     @Getter
     private Coordinates coordinates;

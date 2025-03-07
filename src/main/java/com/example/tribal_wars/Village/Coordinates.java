@@ -18,6 +18,14 @@ public final class Coordinates implements Serializable {
     private Integer y;
 
     @Override
+    public String toString() {
+        return "Coordinates{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(x,y);
     }

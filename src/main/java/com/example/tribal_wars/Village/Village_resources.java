@@ -8,6 +8,7 @@ import jakarta.persistence.PreUpdate;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Embeddable
 @NoArgsConstructor
@@ -20,20 +21,33 @@ public class Village_resources {
     private int current_stone;
     private int current_wood;
     @Setter
-    private int resources_capacity;
+    private int resources_capacity = 1000;
     @Setter
-    private int cache_capacity;
+    private int cache_capacity = 1000; // TODO: capacity is TEMP
     @Setter
-    private int gold_capacity;
+    private int gold_capacity = 1000;
     @Column(nullable = false)
-    @Setter(AccessLevel.NONE)
-    private LocalDateTime resource_last_update;
-    @PrePersist @PreUpdate
-    public void setResource_last_update() {
-        this.resource_last_update = LocalDateTime.now();
+    @Setter
+    private LocalDateTime resource_last_update = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS); //truncatedTo(ChronoUnit.HOURS);
+    // TODO: NOW RESOURCES UPDATE EVERY INTERVAL FOR EACH VILLAGE TIMER INDIVIDUALLY, IT WILL BE NECCESSARY TO HANDLE IT LATER
+
+    public void setResource_last_update(LocalDateTime resource_last_update) {
+        this.resource_last_update = resource_last_update;
     }
 
-
+    @Override
+    public String toString() {
+        return "Village_resources{" +
+                "current_gold=" + current_gold +
+                ", current_iron=" + current_iron +
+                ", current_stone=" + current_stone +
+                ", current_wood=" + current_wood +
+                ", resources_capacity=" + resources_capacity +
+                ", cache_capacity=" + cache_capacity +
+                ", gold_capacity=" + gold_capacity +
+                ", resource_last_update=" + resource_last_update +
+                '}';
+    }
 
     public void update_resource(int resource_amount, Resource resource_type){
         switch (resource_type){
@@ -43,31 +57,35 @@ public class Village_resources {
             case WOOD -> setCurrent_wood(this.current_wood + resource_amount);
         }
     }
-    public void update_all_resources(int wood, int stone, int iron, int gold) {
-        setCurrent_wood(this.current_wood + wood);
-        setCurrent_stone(this.current_stone + stone);
-        setCurrent_iron(this.current_iron + iron);
-        setCurrent_gold(this.current_gold + gold);
+    public void update_all_resources_specifically(int wood, int stone, int iron, int gold) {
+        update_resource(wood, Resource.WOOD);
+        update_resource(stone, Resource.STONE);
+        update_resource(iron, Resource.IRON);
+        update_resource(gold, Resource.GOLD);
+    }
+    public void update_all_resources(int amount){
+        update_all_resources_specifically(amount,amount,amount,amount);
     }
 
     private static final int MINIMUM_RESOURCES = 0;
     private int validate_current_resource(int current_resource, int capacity){
+        System.out.println(current_resource);
         if(current_resource <= MINIMUM_RESOURCES) return MINIMUM_RESOURCES;
         else return Math.min(current_resource, capacity);
     }
-    public void setCurrent_gold(int current_gold) {
-        this.current_gold = validate_current_resource(current_gold,gold_capacity);
+    public void setCurrent_gold(int gold) {
+        this.current_gold = validate_current_resource(gold,gold_capacity);
     }
 
-    public void setCurrent_iron(int current_iron) {
-        this.current_iron = validate_current_resource(current_iron,resources_capacity);
+    public void setCurrent_iron(int iron) {
+        this.current_iron = validate_current_resource(iron,resources_capacity);
     }
 
-    public void setCurrent_stone(int current_stone) {
-        this.current_stone = validate_current_resource(current_stone,resources_capacity);
+    public void setCurrent_stone(int stone) {
+        this.current_stone = validate_current_resource(stone,resources_capacity);
     }
 
-    public void setCurrent_wood(int current_wood) {
-        this.current_wood = validate_current_resource(current_wood,resources_capacity);
+    public void setCurrent_wood(int wood) {
+        this.current_wood = validate_current_resource(wood,resources_capacity);
     }
 }

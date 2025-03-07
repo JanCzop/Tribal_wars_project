@@ -30,9 +30,9 @@ public class Village_controller {
     }
     @GetMapping("/{x}/{y}/update")
     public ResponseEntity<Village> update_village_state(@PathVariable Integer x, @PathVariable Integer y){
-        System.out.println("im here");
-        village_service.update_village_state(village_service.get_village_by_id(new Coordinates(x,y)));
-        return null;
+        return this.village_service.update_village_state(village_service.get_village_by_id(new Coordinates(x,y)))
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
     @GetMapping("/{x}/{y}")
     public ResponseEntity<Village> get_village_by_id(@PathVariable Integer x, @PathVariable Integer y){
