@@ -31,9 +31,8 @@ public class Village_service {
         return village_repository.findAll();
     }
     public Optional<Village> update_village_state(Optional<Village> village){
-        resources_service.update_village_current_resource_state(village);
         if(!village.isEmpty()) {
-
+            resources_service.update_village_current_resource_state(village.get());
         }
         return null;
 

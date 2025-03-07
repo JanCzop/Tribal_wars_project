@@ -37,12 +37,14 @@ public class Village {
      */
 
     @Embedded
+    @Column(nullable = false)
     @Getter @Setter
-    private Village_buildings_level buildings;
+    private Village_buildings_level buildings = new Village_buildings_level();
 
     @Embedded
+    @Column(nullable = false)
     @Getter @Setter
-    private Village_resources resources;
+    private Village_resources resources = new Village_resources();
 
     @Embedded
     @Getter @Setter
