@@ -1,0 +1,5 @@
+game:
+  time:
+    resources_harvest_interval: 10
+  buildings:
+    resource_production_per_level: 5

@@ -1,5 +1,5 @@
 package com.example.tribal_wars.Enums;
 
 public enum Resource {
-    WOOD,STONE,IRON,GOLD
+    Wood, Stone, Iron, Gold;
 }

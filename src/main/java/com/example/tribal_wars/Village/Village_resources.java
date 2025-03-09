@@ -3,8 +3,6 @@ package com.example.tribal_wars.Village;
 import com.example.tribal_wars.Enums.Resource;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -51,17 +49,17 @@ public class Village_resources {
 
     public void update_resource(int resource_amount, Resource resource_type){
         switch (resource_type){
-            case GOLD -> setCurrent_gold(this.current_gold + resource_amount);
-            case IRON -> setCurrent_iron(this.current_iron + resource_amount);
-            case STONE -> setCurrent_stone(this.current_stone + resource_amount);
-            case WOOD -> setCurrent_wood(this.current_wood + resource_amount);
+            case Gold -> setCurrent_gold(this.current_gold + resource_amount);
+            case Iron -> setCurrent_iron(this.current_iron + resource_amount);
+            case Stone -> setCurrent_stone(this.current_stone + resource_amount);
+            case Wood -> setCurrent_wood(this.current_wood + resource_amount);
         }
     }
     public void update_all_resources_specifically(int wood, int stone, int iron, int gold) {
-        update_resource(wood, Resource.WOOD);
-        update_resource(stone, Resource.STONE);
-        update_resource(iron, Resource.IRON);
-        update_resource(gold, Resource.GOLD);
+        update_resource(wood, Resource.Wood);
+        update_resource(stone, Resource.Stone);
+        update_resource(iron, Resource.Iron);
+        update_resource(gold, Resource.Gold);
     }
     public void update_all_resources(int amount){
         update_all_resources_specifically(amount,amount,amount,amount);

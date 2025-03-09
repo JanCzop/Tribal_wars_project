@@ -14,6 +14,8 @@ import java.time.temporal.ChronoUnit;
 public class Resources_service {
     private final Game_config game_config;
     private final Buildings_config buildings_config;
+
+    // TODO: CALCULATING RESOURCES FROM ACTUAL BUILDINGS LEVEL
     @Autowired
     public Resources_service(Game_config game_config, Buildings_config buildings_config) {
         this.game_config = game_config;
