@@ -12,10 +12,13 @@ import java.util.EnumMap;
 import java.util.Map;
 
 @Entity
-@NoArgsConstructor
 public class Village {
     public Village(Coordinates coordinates){
         this.coordinates = coordinates;
+        this.buildings = new EnumMap<Building_type, Integer>(Building_type.class);
+        this.resources = new Village_resources();
+    }
+    public Village(){
         this.buildings = new EnumMap<Building_type, Integer>(Building_type.class);
         this.resources = new Village_resources();
     }
@@ -61,5 +64,8 @@ public class Village {
     @Embedded
     @Getter @Setter
     private Construction construction;
+
+    @Getter @Setter
+    private Specialty specialty;
 
 }

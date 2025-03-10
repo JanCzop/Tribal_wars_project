@@ -14,6 +14,8 @@ import java.util.Map;
 @Service
 public class Construction_service {
 
+    private static final int TEST_ACCELERATION = 10;
+
     public boolean is_construction_viable(Building_type building, Village village){
         if(village.getConstruction() != null) return false;
         Integer current_level = village.getBuildings().get(building);
@@ -33,9 +35,10 @@ public class Construction_service {
     public void start_construction(Village village, Building_type building){
         if(village.getConstruction() != null) return;
         int constructed_building_level =
-                village.getBuildings().compute(building, (key, level) -> (level == null) ? 1 : level + 1);
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime construction_end = now.plus(building.get_time_for_level(constructed_building_level), ChronoUnit.SECONDS);
+                village.getBuildings().getOrDefault(building,1) + 1;
+        LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        LocalDateTime construction_end =
+                now.plus(building.get_time_for_level(constructed_building_level)/TEST_ACCELERATION, ChronoUnit.SECONDS).truncatedTo(ChronoUnit.SECONDS);
         village.setConstruction(new Construction(building, now, construction_end));
     }
     public void update_construction(Village village){
