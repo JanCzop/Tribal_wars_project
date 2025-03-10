@@ -16,8 +16,8 @@ public class Village_service {
     public Village_service(Village_repository village_repository, Resources_service resources_service) {
         this.village_repository = village_repository;
         this.resources_service = resources_service;
-
-        Village test_village = new Village(new Coordinates(1,1));
+        Coordinates test_id = new Coordinates(1,1);
+        Village test_village = new Village(test_id);
         this.village_repository.save(test_village);
     }
 

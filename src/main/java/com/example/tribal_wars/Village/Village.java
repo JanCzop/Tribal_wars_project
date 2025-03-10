@@ -1,5 +1,6 @@
 package com.example.tribal_wars.Village;
 
+import com.example.tribal_wars.Enums.Building_type;
 import com.example.tribal_wars.Player.Player;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
@@ -7,11 +8,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 @Entity
 @NoArgsConstructor
 public class Village {
     public Village(Coordinates coordinates){
         this.coordinates = coordinates;
+        this.buildings = new EnumMap<Building_type, Integer>(Building_type.class);
+        this.resources = new Village_resources();
     }
 
     @EmbeddedId
@@ -24,7 +30,6 @@ public class Village {
     @Getter @Setter
     private Player player;
 
-    /* LEGACY BUILDINGS MAP;
     @ElementCollection
     @CollectionTable(
             name = "village_buildings",
@@ -37,13 +42,16 @@ public class Village {
     @MapKeyColumn(name = "building")
     @Column(name = "level")
     @Getter @Setter
-    private Map<Building, Integer> buildings;
-     */
+    private Map<Building_type, Integer> buildings;
+
+    /* LEGACY EMBEDDED BUILDINGS
 
     @Embedded
     @Column(nullable = false)
     @Getter @Setter
     private Village_buildings_level buildings = new Village_buildings_level();
+
+     */
 
     @Embedded
     @Column(nullable = false)

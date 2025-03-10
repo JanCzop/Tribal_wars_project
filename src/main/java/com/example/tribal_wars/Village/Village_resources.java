@@ -14,16 +14,16 @@ import java.time.temporal.ChronoUnit;
 @Getter
 public class Village_resources {
 
-    private int current_gold;
-    private int current_iron;
-    private int current_stone;
-    private int current_wood;
+    private Integer current_gold = 0;
+    private Integer current_iron = 0;
+    private Integer current_stone = 0;
+    private Integer current_wood = 0;
     @Setter
-    private int resources_capacity = 1000;
+    private Integer resources_capacity = 1000;
     @Setter
-    private int cache_capacity = 1000; // TODO: capacity is TEMP
+    private Integer cache_capacity = 1000; // TODO: capacity is TEMP
     @Setter
-    private int gold_capacity = 1000;
+    private Integer gold_capacity = 1000;
     @Column(nullable = false)
     @Setter
     private LocalDateTime resource_last_update = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS); //truncatedTo(ChronoUnit.HOURS);
