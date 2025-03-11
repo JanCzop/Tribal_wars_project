@@ -1,7 +1,7 @@
 package com.example.tribal_wars.Player;
 
-import com.example.tribal_wars.Units.Army;
-import com.example.tribal_wars.Units.Army_command;
+import com.example.tribal_wars.Armies.Army_village.Army;
+import com.example.tribal_wars.Armies.Army_commands.Army_command;
 import com.example.tribal_wars.Village.Village;
 import jakarta.persistence.*;
 import lombok.Getter;

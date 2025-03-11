@@ -1,10 +1,10 @@
-package com.example.tribal_wars.Units;
+package com.example.tribal_wars.Armies.Army_village;
 
+import com.example.tribal_wars.Armies.Army_details;
 import com.example.tribal_wars.Player.Player;
 import com.example.tribal_wars.Village.Coordinates;
 import com.example.tribal_wars.Village.Village;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

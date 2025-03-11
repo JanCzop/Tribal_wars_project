@@ -1,10 +1,6 @@
 package com.example.tribal_wars.Village;
 
 import com.example.tribal_wars.Enums.Building_type;
-import com.example.tribal_wars.Game_service.Construction_service;
-import com.example.tribal_wars.Game_service.Resources_service;
-import com.example.tribal_wars.Units.Army_details;
-import com.example.tribal_wars.Units.Unit_type;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,18 +35,23 @@ public class Village_service {
         village_repository.deleteById(id);
     }
     public Optional<Village> get_village_by_id(Coordinates id){
-        return update_village_state(village_repository.findById(id));
+        return village_repository.findById(id);
     }
     public List<Village> get_all_villages(){
         return village_repository.findAll();
     }
     @Transactional
     public Optional<Village> update_village_state(Optional<Village> village){
-        if(village.isPresent()) {
-            this.resources_service.update_village_current_resource_state(village.get());
-            this.construction_service.update_construction(village.get());
-            return Optional.of(this.village_repository.save(village.get()));
-        }
-        return Optional.empty();
+        return village.map(v -> {
+            this.resources_service.update_village_current_resource_state(v);
+            this.construction_service.update_construction(v);
+            return this.village_repository.save(v);
+        });
+    }
+    @Transactional
+    public Optional<Village> construct_building(Optional<Village> village, Building_type type){
+        village.filter(v -> this.construction_service.is_construction_viable(type,v))
+                .ifPresent(v -> this.construction_service.start_construction(v,type));
+        return village;
     }
 }

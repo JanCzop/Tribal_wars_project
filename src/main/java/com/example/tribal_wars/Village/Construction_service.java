@@ -1,4 +1,4 @@
-package com.example.tribal_wars.Game_service;
+package com.example.tribal_wars.Village;
 
 import com.example.tribal_wars.Enums.Building_type;
 import com.example.tribal_wars.Village.Construction;
@@ -11,6 +11,7 @@ import java.util.Map;
 
 @Service
 public class Construction_service {
+    // TODO: DECONSTRUCTION
 
     private static final int TEST_ACCELERATION = 10;
 

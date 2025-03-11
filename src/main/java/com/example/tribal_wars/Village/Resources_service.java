@@ -1,10 +1,9 @@
-package com.example.tribal_wars.Game_service;
+package com.example.tribal_wars.Village;
 
 import com.example.tribal_wars.Config.Buildings_config;
 import com.example.tribal_wars.Config.Game_config;
 import com.example.tribal_wars.Enums.Building_type;
 import com.example.tribal_wars.Enums.Resource;
-import com.example.tribal_wars.Village.Specialty;
 import com.example.tribal_wars.Village.Village;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

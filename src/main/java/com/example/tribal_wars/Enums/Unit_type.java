@@ -1,4 +1,4 @@
-package com.example.tribal_wars.Units;
+package com.example.tribal_wars.Enums;
 
 import lombok.Getter;
 

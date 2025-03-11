@@ -1,12 +1,12 @@
 package com.example.tribal_wars.Village;
 
 import com.example.tribal_wars.Enums.Building_type;
+import com.example.tribal_wars.Enums.Specialty;
 import com.example.tribal_wars.Player.Player;
-import com.example.tribal_wars.Units.Army;
+import com.example.tribal_wars.Armies.Army_village.Army;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.EnumMap;

@@ -1,5 +1,6 @@
 package com.example.tribal_wars.Village;
 
+import com.example.tribal_wars.Enums.Building_type;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class Village_controller {
                 .header("Village created successfully.")
                 .body(this.village_service.save_village(village));
     }
-    /*
+
     @GetMapping("/{x}/{y}/update")
     public ResponseEntity<Village> update_village_state(@PathVariable Integer x, @PathVariable Integer y){
         return this.village_service.update_village_state(village_service.get_village_by_id(new Coordinates(x,y)))
@@ -36,7 +37,7 @@ public class Village_controller {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-     */
+
     @GetMapping("/{x}/{y}")
     public ResponseEntity<Village> get_village_by_id(@PathVariable Integer x, @PathVariable Integer y){
         return this.village_service.get_village_by_id(new Coordinates(x,y))
@@ -86,5 +87,14 @@ public class Village_controller {
     public ResponseEntity<Void> delete_village(@PathVariable Integer x, @PathVariable Integer y){
         this.village_service.delete_village(new Coordinates(x,y));
         return ResponseEntity.noContent().build();
+    }
+    @PostMapping("/{x}/{y}/build")
+    public ResponseEntity<Village> construct_building(@PathVariable Integer x, @PathVariable Integer y, @RequestBody String building_type_name){
+        return this.village_service.construct_building(
+                this.village_service.get_village_by_id(new Coordinates(x,y)),
+                Building_type.valueOf(building_type_name))
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+
     }
 }
