@@ -3,6 +3,8 @@ package com.example.tribal_wars.Village;
 import com.example.tribal_wars.Enums.Building_type;
 import com.example.tribal_wars.Game_service.Construction_service;
 import com.example.tribal_wars.Game_service.Resources_service;
+import com.example.tribal_wars.Units.Army_details;
+import com.example.tribal_wars.Units.Unit_type;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

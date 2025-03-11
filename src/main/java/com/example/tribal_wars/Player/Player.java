@@ -1,5 +1,7 @@
 package com.example.tribal_wars.Player;
 
+import com.example.tribal_wars.Units.Army;
+import com.example.tribal_wars.Units.Army_command;
 import com.example.tribal_wars.Village.Village;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -30,5 +32,10 @@ public class Player {
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
     @Getter @Setter
     private List<Village> villages;
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Army> armies;
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Army_command> army_commands;
+
 
 }

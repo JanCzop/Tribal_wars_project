@@ -28,9 +28,7 @@ public enum Building_type {
     private static final double TIME_MULTIPLIER = 2.1;
 
     private final boolean necessary_building;
-    @Getter
     public static final int MINIMUM_NECESSARY_BUILDING_LEVEL = 1;
-    @Getter
     public static final int MINIMUM_UNNECESSARY_BUILDING_LEVEL = 0;
 
     // TODO: PARAMETRIZE THIS INDIVIDUALLY

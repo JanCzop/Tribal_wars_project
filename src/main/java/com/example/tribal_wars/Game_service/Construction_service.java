@@ -3,8 +3,6 @@ package com.example.tribal_wars.Game_service;
 import com.example.tribal_wars.Enums.Building_type;
 import com.example.tribal_wars.Village.Construction;
 import com.example.tribal_wars.Village.Village;
-import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

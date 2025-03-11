@@ -2,6 +2,7 @@ package com.example.tribal_wars.Village;
 
 import com.example.tribal_wars.Enums.Building_type;
 import com.example.tribal_wars.Player.Player;
+import com.example.tribal_wars.Units.Army;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -32,6 +34,12 @@ public class Village {
     @JsonBackReference
     @Getter @Setter
     private Player player;
+
+
+    @OneToMany(mappedBy = "village", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Army> armies;
+
+
 
     @ElementCollection
     @CollectionTable(
