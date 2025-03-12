@@ -10,28 +10,25 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Army_command {
+public class Command {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /*
     @ManyToOne
     @JoinColumns({
-            @JoinColumn(name = "origin_village_x", referencedColumnName = "village_x"),
-            @JoinColumn(name = "origin_village_y", referencedColumnName = "village_y")
+            @JoinColumn(name = "origin_village_x", referencedColumnName = "x"),
+            @JoinColumn(name = "origin_village_y", referencedColumnName = "y")
     })
     private Village origin_village;
 
     @ManyToOne
     @JoinColumns({
-            @JoinColumn(name = "origin_village_x", referencedColumnName = "village_x"),
-            @JoinColumn(name = "origin_village_y", referencedColumnName = "village_y")
+            @JoinColumn(name = "target_village_x", referencedColumnName = "x"),
+            @JoinColumn(name = "target_village_y", referencedColumnName = "y")
     })
     private Village target_village;
 
-
-     */
 
 
     @ManyToOne
