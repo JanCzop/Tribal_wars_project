@@ -45,29 +45,18 @@ public class Player_controller {
                 .body(players);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Player> update_player(@PathVariable Long id, @RequestBody Player player){
-        if(!id.equals(player.getId()))
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .header("Param ID does not match Body")
-                    .build();
-        else{
-            Optional<Player> retrieved_player = this.player_service.get_player_by_id(id);
-            return retrieved_player
-                    .map(existing_player -> {
-                        existing_player.setUsername(player.getUsername());
-                        existing_player.setPassword(player.getPassword());
-                        existing_player.setEmail(player.getEmail());
-                        existing_player.setVillages(player.getVillages());
-                        return ResponseEntity
-                                .status(HttpStatus.OK)
-                                .body(this.player_service.save_player(existing_player));
-                    })
+    public ResponseEntity<Player> put_player(@PathVariable Long id, @RequestBody Player player){
+        return id.equals(player.getId())
+                ? player_service.put_player(id,player)
+                    .map(ResponseEntity::ok)
                     .orElseGet(() -> ResponseEntity
                             .status(HttpStatus.NOT_FOUND)
                             .header("Player with ID " + id + " not found.")
-                            .build());
-        }
+                            .build())
+                : ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .header("Param ID does not match Body")
+                    .build();
     }
 
     @DeleteMapping("/{id}")

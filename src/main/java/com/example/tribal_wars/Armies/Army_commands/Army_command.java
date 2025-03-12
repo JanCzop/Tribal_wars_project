@@ -15,7 +15,7 @@ public class Army_command {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
+    /*
     @ManyToOne
     @JoinColumns({
             @JoinColumn(name = "origin_village_x", referencedColumnName = "village_x"),
@@ -30,6 +30,8 @@ public class Army_command {
     })
     private Village target_village;
 
+
+     */
 
 
     @ManyToOne

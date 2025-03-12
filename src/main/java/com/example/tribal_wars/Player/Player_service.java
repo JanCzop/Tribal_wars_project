@@ -26,4 +26,13 @@ public class Player_service {
     public List<Player> get_all_players(){
         return this.player_repository.findAll();
     }
+    public Optional<Player> put_player(Long id, Player player) {
+        return player_repository.findById(id).map(p -> {
+            p.setUsername(player.getUsername());
+            p.setPassword(player.getPassword());
+            p.setEmail(player.getEmail());
+            p.setVillages(player.getVillages());
+            return player_repository.save(p);
+        });
+    }
 }

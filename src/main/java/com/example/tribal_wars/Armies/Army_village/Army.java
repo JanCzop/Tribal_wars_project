@@ -14,10 +14,9 @@ import java.util.Objects;
 
 @Entity
 @NoArgsConstructor
-@IdClass(Army.Army_id.class)
 @Getter @Setter
 public class Army {
-
+    @Embeddable
     @Getter @Setter
     public static class Army_id implements Serializable{
         private Coordinates village;
@@ -41,8 +40,9 @@ public class Army {
         }
     }
 
+    @EmbeddedId
+    private Army_id id;
 
-    @Id
     @ManyToOne
     @JoinColumns({
             @JoinColumn(name = "village_x", referencedColumnName = "x"),
@@ -50,7 +50,7 @@ public class Army {
     })
     private Village village;
 
-    @Id
+
     @ManyToOne
     @JoinColumn(name = "player_id", referencedColumnName = "id")
     private Player player;
