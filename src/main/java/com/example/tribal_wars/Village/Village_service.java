@@ -57,10 +57,14 @@ public class Village_service {
         Optional.ofNullable(village.getPlayer())
                 .ifPresent(player -> this.player_repository.findById(player.getId())
                         .orElseThrow(() -> new Exc_item_not_found("Player with ID " + player.getId() + " not found.")));
-        village.getArmies().forEach(army ->
-                Optional.ofNullable(army.getId())
-                        .ifPresent(id -> this.army_repository.findById(id)
-                                .orElseThrow(() -> new Exc_item_not_found("Army with ID " + id + " not found."))));
+        Optional.ofNullable(village.getArmies())
+                .ifPresent(armies -> armies.forEach(army ->
+                        Optional.ofNullable(army.getId())
+                                .ifPresent(id -> this.army_repository.findById(id)
+                                        .orElseThrow(() -> new Exc_item_not_found("Army with ID " + id + " not found."))
+                                )
+                ));
+
         Optional.ofNullable(village.getConstruction())
                 .ifPresent(construction -> this.construction_service.getConstruction_repository()
                         .findById(construction.getId())
@@ -76,7 +80,7 @@ public class Village_service {
 
 
     public Village save_village(Village village){
-        //validate_foreign_keys(village);
+        validate_foreign_keys(village);
         return village_repository.save(village);
     }
     public void delete_village(Coordinates coordinates){
@@ -90,7 +94,7 @@ public class Village_service {
         return new HashSet<>(village_repository.findAll());
     }
     public Village put_village(Coordinates coordinates, Village village){
-        //validate_foreign_keys(village);
+        validate_foreign_keys(village);
         return this.village_repository.findById(coordinates)
                 .map(v -> {
                     v.setPlayer(village.getPlayer());

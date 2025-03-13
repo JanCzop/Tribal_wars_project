@@ -21,11 +21,15 @@ public class Player_service {
         village_repository = villageRepository;
     }
     public void validate_foreign_keys(Player player) {
-        player.getVillages().forEach(village ->
-                Optional.ofNullable(village.getCoordinates())
-                        .ifPresent(coordinates -> this.village_repository.findById(coordinates)
-                                .orElseThrow(() -> new Exc_item_not_found("Village with Coordinates " + coordinates + " not found."))));
+        Optional.ofNullable(player.getVillages())  // Sprawdzamy, czy getVillages() nie zwróciło null
+                .ifPresent(villages -> villages.forEach(village ->
+                        Optional.ofNullable(village.getCoordinates())  // Sprawdzamy, czy getCoordinates() nie zwróciło null
+                                .ifPresent(coordinates -> this.village_repository.findById(coordinates)
+                                        .orElseThrow(() -> new Exc_item_not_found("Village with Coordinates " + coordinates + " not found."))
+                                )
+                ));
     }
+
 
     public Player save_player(Player player){
         validate_foreign_keys(player);
