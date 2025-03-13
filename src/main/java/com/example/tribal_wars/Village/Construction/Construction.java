@@ -1,6 +1,7 @@
-package com.example.tribal_wars.Village;
+package com.example.tribal_wars.Village.Construction;
 
 import com.example.tribal_wars.Enums.Building_type;
+import com.example.tribal_wars.Village.Village;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

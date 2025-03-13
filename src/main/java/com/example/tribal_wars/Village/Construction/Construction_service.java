@@ -1,6 +1,7 @@
-package com.example.tribal_wars.Village;
+package com.example.tribal_wars.Village.Construction;
 
 import com.example.tribal_wars.Enums.Building_type;
+import com.example.tribal_wars.Village.Village;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,6 @@ public class Construction_service {
     }
 
     public void start_construction(Village village, Building_type building){
-        if(village.getConstruction() != null) return;
         int constructed_building_level =
                 village.getBuildings().getOrDefault(building,1) + 1;
         LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);

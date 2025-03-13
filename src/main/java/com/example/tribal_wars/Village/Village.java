@@ -4,7 +4,9 @@ import com.example.tribal_wars.Enums.Building_type;
 import com.example.tribal_wars.Enums.Specialty;
 import com.example.tribal_wars.Player.Player;
 import com.example.tribal_wars.Armies.Army_village.Army;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.example.tribal_wars.Village.Construction.Construction;
+import com.example.tribal_wars.Village.Recruitment.Recruitment;
+import com.example.tribal_wars.Village.Resources.Village_resources;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -67,8 +69,8 @@ public class Village {
 
     @OneToOne(mappedBy = "village", cascade = CascadeType.ALL, orphanRemoval = true)
     private Construction construction;
-    @OneToOne(mappedBy = "village", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Recruitment recruitment;
+    @OneToMany(mappedBy = "village", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Recruitment> recruitment;
 
     private Specialty specialty;
 

@@ -1,12 +1,13 @@
 package com.example.tribal_wars.Village;
 
-import com.example.tribal_wars.Armies.Army_village.Army;
 import com.example.tribal_wars.Armies.Army_village.Army_repository;
 import com.example.tribal_wars.Enums.Building_type;
 import com.example.tribal_wars.Exceptions.Exc_building_cannot_be_constructed;
 import com.example.tribal_wars.Exceptions.Exc_item_not_found;
-import com.example.tribal_wars.Player.Player;
 import com.example.tribal_wars.Player.Player_repository;
+import com.example.tribal_wars.Village.Construction.Construction_service;
+import com.example.tribal_wars.Village.Recruitment.Recruitment_service;
+import com.example.tribal_wars.Village.Resources.Resources_service;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class Village_service {
@@ -45,8 +45,6 @@ public class Village_service {
     public void init_tester(){
         Coordinates test_id = new Coordinates(1,1);
         Village test_village = new Village(test_id);
-        this.recruitment_service.do_nothing(2L);
-        System.out.println(this.construction_service.is_construction_viable(Building_type.Blacksmith,test_village));
         save_village(test_village);
         this.construction_service.start_construction(test_village, Building_type.Blacksmith);
         save_village(test_village);
@@ -70,9 +68,13 @@ public class Village_service {
                         .findById(construction.getId())
                         .orElseThrow(() -> new Exc_item_not_found("Construction with ID " + construction.getId() + " not found.")));
         Optional.ofNullable(village.getRecruitment())
-                .ifPresent(recruitment -> this.recruitment_service.getRecruitment_repository()
-                        .findById(recruitment.getId())
-                        .orElseThrow(() -> new Exc_item_not_found("Recruitment with ID " + recruitment.getId() + " not found.")));
+                .ifPresent(recruitment -> recruitment.forEach(r ->
+                        Optional.ofNullable(r.getId())
+                                .ifPresent(id -> this.recruitment_service.getRecruitment_repository()
+                                        .findById(id)
+                                        .orElseThrow(() -> new Exc_item_not_found("Recruitment with ID " + id + " not found."))
+                                )
+                ));
         Optional.ofNullable(village.getResources())
                 .orElseThrow(() -> new Exc_item_not_found("Resources are null for village with coordinates " + village.getCoordinates()));
     }

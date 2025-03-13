@@ -1,4 +1,4 @@
-package com.example.tribal_wars.Village;
+package com.example.tribal_wars.Village.Resources;
 
 import com.example.tribal_wars.Enums.Resource;
 import jakarta.persistence.Column;
