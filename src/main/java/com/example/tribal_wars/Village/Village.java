@@ -36,9 +36,12 @@ public class Village {
     private Player player;
 
 
+
     @OneToMany(mappedBy = "village", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Army> armies;
-
+    @OneToOne
+    @JoinColumn(name = "local_army", unique = true)
+    private Army local_army;
 
 
     @ElementCollection
@@ -53,15 +56,6 @@ public class Village {
     @MapKeyColumn(name = "building")
     @Column(name = "level")
     private Map<Building_type, Integer> buildings;
-
-    /* LEGACY EMBEDDED BUILDINGS
-
-    @Embedded
-    @Column(nullable = false)
-    @Getter @Setter
-    private Village_buildings_level buildings = new Village_buildings_level();
-
-     */
 
     @Embedded
     @Column(nullable = false)

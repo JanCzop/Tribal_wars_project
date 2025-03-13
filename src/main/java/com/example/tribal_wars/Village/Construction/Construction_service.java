@@ -43,10 +43,13 @@ public class Construction_service {
                 village.getBuildings().getOrDefault(building,1) + 1;
         LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         LocalDateTime construction_end =
-                now.plus(building.get_time_for_level(constructed_building_level)/TEST_ACCELERATION, ChronoUnit.SECONDS).truncatedTo(ChronoUnit.SECONDS);
+                now.plus(calculate_construction_time(building,constructed_building_level), ChronoUnit.SECONDS).truncatedTo(ChronoUnit.SECONDS);
         Construction construction = new Construction(building, now, construction_end, village);
         this.construction_repository.save(construction);
         village.setConstruction(construction);
+    }
+    private int calculate_construction_time(Building_type building, int level){
+        return building.get_time_for_level(level)/TEST_ACCELERATION;
     }
     public void check_construction(Village village){
         if(village.getConstruction() != null &&
@@ -58,11 +61,9 @@ public class Construction_service {
         village.setConstruction(null);
     }
     public void end_construction(Village village){
-        if(village.getConstruction() == null) return;
         upgrade_building(
                 village.getConstruction().getConstruction_building_type(),
                 village.getBuildings());
-        this.construction_repository.delete(village.getConstruction());
         stop_construction(village);
     }
 

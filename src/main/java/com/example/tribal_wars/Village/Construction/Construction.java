@@ -38,4 +38,15 @@ public class Construction {
         this.construction_end_time = construction_end_time;
         this.village = village;
     }
+
+    @Override
+    public String toString() {
+        return "Construction{" +
+                "id=" + id +
+                ", construction_building_type=" + construction_building_type +
+                ", construction_start_time=" + construction_start_time +
+                ", construction_end_time=" + construction_end_time +
+                ", village=" + village.getCoordinates() +
+                '}';
+    }
 }

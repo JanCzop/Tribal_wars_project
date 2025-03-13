@@ -39,4 +39,6 @@ public class Recruitment {
         this.recruitment_end_time = recruitment_end_time;
         this.village = village;
     }
+
+
 }

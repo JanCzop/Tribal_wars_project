@@ -43,4 +43,19 @@ public class Army_details {
         return army_map;
     }
 
+    @Override
+    public String toString() {
+        return "Army_details{" +
+                "spearman=" + spearman +
+                ", swordsman=" + swordsman +
+                ", axeman=" + axeman +
+                ", archer=" + archer +
+                ", scout=" + scout +
+                ", light_cavalry=" + light_cavalry +
+                ", heavy_cavalry=" + heavy_cavalry +
+                ", ram=" + ram +
+                ", catapult=" + catapult +
+                ", noble=" + noble +
+                '}';
+    }
 }

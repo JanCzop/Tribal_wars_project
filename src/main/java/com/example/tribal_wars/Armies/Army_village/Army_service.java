@@ -6,6 +6,7 @@ import com.example.tribal_wars.Player.Player;
 import com.example.tribal_wars.Player.Player_repository;
 import com.example.tribal_wars.Village.Village;
 import com.example.tribal_wars.Village.Village_repository;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,7 @@ public class Army_service {
         player_repository = playerRepository;
     }
 
+
     public void validate_foreign_keys(Army army) {
         Optional.ofNullable(army.getVillage())
                 .ifPresent(village -> this.village_repository.findById(village.getCoordinates())
@@ -41,17 +43,17 @@ public class Army_service {
         validate_foreign_keys(army);
         return this.army_repository.save(army);
     }
-    public void delete_army(Army.Army_id id){
+    public void delete_army(Long id){
         this.army_repository.deleteById(id);
     }
-    public Army get_army_by_id(Army.Army_id id){
+    public Army get_army_by_id(Long id){
         return this.army_repository.findById(id)
                 .orElseThrow(() -> new Exc_item_not_found("Army with ID " + id + " not found."));
     }
     public Set<Army> get_all_armies(){
         return new HashSet<>(this.army_repository.findAll());
     }
-    public Army put_army(Army.Army_id id, Army army){
+    public Army put_army(Long id, Army army){
         validate_foreign_keys(army);
         return this.army_repository.findById(id).map(a -> {
             a.setVillage(army.getVillage());

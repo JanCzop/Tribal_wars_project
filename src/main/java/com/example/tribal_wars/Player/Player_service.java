@@ -3,6 +3,7 @@ package com.example.tribal_wars.Player;
 import com.example.tribal_wars.Exceptions.Exc_item_not_found;
 import com.example.tribal_wars.Village.Village;
 import com.example.tribal_wars.Village.Village_repository;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,18 @@ public class Player_service {
         this.player_repository = player_repository;
         village_repository = villageRepository;
     }
+    /*
+    @PostConstruct
+    public void player_tester(){
+        Player player = new Player();
+        player.setUsername("John Doe");
+        player.setEmail("john.doe@email.com");
+        player.setPassword("password");
+        this.player_repository.save(player);
+    }
+
+     */
+
     public void validate_foreign_keys(Player player) {
         Optional.ofNullable(player.getVillages())
                 .ifPresent(villages -> villages.forEach(village ->
