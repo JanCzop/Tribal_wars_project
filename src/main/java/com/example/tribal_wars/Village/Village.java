@@ -12,8 +12,10 @@ import lombok.Setter;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Entity
+@Getter @Setter
 public class Village {
     public Village(Coordinates coordinates){
         this.coordinates = coordinates;
@@ -26,18 +28,15 @@ public class Village {
     }
 
     @EmbeddedId
-    @Getter
     private Coordinates coordinates;
 
     @ManyToOne
     @JoinColumn(name = "player_id")
-    @JsonBackReference
-    @Getter @Setter
     private Player player;
 
 
     @OneToMany(mappedBy = "village", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Army> armies;
+    private Set<Army> armies;
 
 
 
@@ -52,7 +51,6 @@ public class Village {
     @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name = "building")
     @Column(name = "level")
-    @Getter @Setter
     private Map<Building_type, Integer> buildings;
 
     /* LEGACY EMBEDDED BUILDINGS
@@ -66,14 +64,13 @@ public class Village {
 
     @Embedded
     @Column(nullable = false)
-    @Getter @Setter
     private Village_resources resources = new Village_resources();
 
     @Embedded
-    @Getter @Setter
     private Construction construction;
+    @Embedded
+    private Recruitment recruitment;
 
-    @Getter @Setter
     private Specialty specialty;
 
 }

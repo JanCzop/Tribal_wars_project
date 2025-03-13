@@ -1,5 +1,6 @@
 package com.example.tribal_wars.Armies.Army_village;
 
+import com.example.tribal_wars.Exceptions.Exc_invalid_request;
 import com.example.tribal_wars.Village.Coordinates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/armies")
@@ -22,46 +24,31 @@ public class Army_controller {
     public ResponseEntity<Army> create_army(@RequestBody Army army){
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .header("Army created successfully.")
                 .body(this.army_service.save_army(army));
     }
     @GetMapping("/{village_x}/{village_y}/{player_id}")
     public ResponseEntity<Army> get_army_by_id
             (@PathVariable Integer village_x, @PathVariable Integer village_y, @PathVariable Long player_id){
-        return this.army_service.get_army_by_id(new Army.Army_id(new Coordinates(village_x,village_y),player_id))
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        return ResponseEntity.ok(
+                this.army_service.get_army_by_id(new Army.Army_id(new Coordinates(village_x,village_y),player_id)));
+
     }
     @GetMapping("/all")
-    public ResponseEntity<List<Army>> get_all_armys(){
-        List<Army> armies = this.army_service.get_all_armies();
-        String header = "Total-count";
-        if(armies.isEmpty())
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .header(header,"0")
-                    .build();
-        else return ResponseEntity
-                .status(HttpStatus.OK)
-                .header(header,String.valueOf(armies.size()))
-                .body(armies);
+    public ResponseEntity<Set<Army>> get_all_armies(){
+        return Optional.ofNullable(this.army_service.get_all_armies())
+                .filter(armies -> !armies.isEmpty())
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
     @PutMapping("/{village_x}/{village_y}/{player_id}")
     public ResponseEntity<Army> update_army
             (@PathVariable Integer village_x, @PathVariable Integer village_y, @PathVariable Long player_id, @RequestBody Army army){
         Army.Army_id id = new Army.Army_id(new Coordinates(village_x,village_y),player_id);
-        return id.equals(army.getId())
-                ? army_service.put_army(id,army)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity
-                        .status(HttpStatus.NOT_FOUND)
-                        .header("Player with ID " + id + " not found.")
-                        .build())
-                : ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .header("Param ID does not match Body")
-                .build();
+        return Optional.ofNullable(army)
+                .filter(a -> id.equals(a.getId()))
+                .map(a -> ResponseEntity.ok(this.army_service.put_army(id,a)))
+                .orElseThrow(() -> new Exc_invalid_request("Parameter ID does not match it's body."));
     }
 
 

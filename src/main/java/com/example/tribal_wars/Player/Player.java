@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -31,11 +31,11 @@ public class Player {
 
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
     @Getter @Setter
-    private List<Village> villages;
+    private Set<Village> villages;
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Army> armies;
+    private Set<Army> armies;
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Command> army_commands;
+    private Set<Command> army_commands;
 
 
 }

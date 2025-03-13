@@ -1,6 +1,7 @@
 package com.example.tribal_wars.Village;
 
 import com.example.tribal_wars.Enums.Building_type;
+import com.example.tribal_wars.Exceptions.Exc_invalid_request;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/villages")
@@ -26,62 +28,37 @@ public class Village_controller {
         //village.setPlayer_owner(null); // TODO: CREATE CONCRETE EXCEPTION HANDLERS
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .header("Village created successfully.")
                 .body(this.village_service.save_village(village));
     }
 
     @GetMapping("/{x}/{y}/update")
     public ResponseEntity<Village> update_village_state(@PathVariable Integer x, @PathVariable Integer y){
-        return this.village_service.update_village_state(village_service.get_village_by_id(new Coordinates(x,y)))
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        return ResponseEntity.ok
+                (this.village_service.update_village_state(new Coordinates(x,y)));
+
     }
 
 
     @GetMapping("/{x}/{y}")
     public ResponseEntity<Village> get_village_by_id(@PathVariable Integer x, @PathVariable Integer y){
-        return this.village_service.get_village_by_id(new Coordinates(x,y))
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        return ResponseEntity.ok(this.village_service.get_village_by_id(new Coordinates(x,y)));
+
 
     }
     @GetMapping("/all")
-    public ResponseEntity<List<Village>> get_all_villages(){
-        List<Village> villages = this.village_service.get_all_villages();
-        String header = "Total-count";
-        if(villages.isEmpty())
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .header(header,"0")
-                    .build();
-        else return ResponseEntity
-                .status(HttpStatus.OK)
-                .header(header,String.valueOf(villages.size()))
-                .body(villages);
+    public ResponseEntity<Set<Village>> get_all_villages(){
+        return Optional.ofNullable(this.village_service.get_all_villages())
+                .filter(villages -> !villages.isEmpty())
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.noContent().build());
     }
     @PutMapping("/{x}/{y}")
     public ResponseEntity<Village> update_village(@PathVariable Integer x, @PathVariable Integer y, @RequestBody Village village){
-        Coordinates coordinates = new Coordinates(x,y);
-        if(!coordinates.equals(village.getCoordinates()))
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .header("Param ID does not match Body")
-                    .build();
-        else{
-            Optional<Village> retrieved_village = this.village_service.get_village_by_id(coordinates);
-            return retrieved_village
-                    .map(existing_village -> {
-                        //existing_village.setPlayer_id(village.getPlayer_id());
-                        existing_village.setBuildings(village.getBuildings());
-                        return ResponseEntity
-                                .status(HttpStatus.OK)
-                                .body(this.village_service.save_village(existing_village));
-                    })
-                    .orElseGet(() -> ResponseEntity
-                            .status(HttpStatus.NOT_FOUND)
-                            .header("Village with ID " + x + "/" + y + " not found.")
-                            .build());
-        }
+        Coordinates id = new Coordinates(x,y);
+        return Optional.ofNullable(village)
+                .filter(v -> id.equals(v.getCoordinates()))
+                .map(v -> ResponseEntity.ok(this.village_service.put_village(id,v)))
+                .orElseThrow(() -> new Exc_invalid_request("Parameter ID does not match it's body."));
     }
     @DeleteMapping("/{x}/{y}")
     public ResponseEntity<Void> delete_village(@PathVariable Integer x, @PathVariable Integer y){
@@ -90,11 +67,7 @@ public class Village_controller {
     }
     @PostMapping("/{x}/{y}/build")
     public ResponseEntity<Village> construct_building(@PathVariable Integer x, @PathVariable Integer y, @RequestBody String building_type_name){
-        return this.village_service.construct_building(
-                this.village_service.get_village_by_id(new Coordinates(x,y)),
-                Building_type.valueOf(building_type_name))
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
-
+        return ResponseEntity.ok(this.village_service.construct_building(
+                new Coordinates(x,y), Building_type.valueOf(building_type_name)));
     }
 }

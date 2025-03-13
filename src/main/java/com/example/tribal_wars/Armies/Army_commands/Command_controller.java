@@ -1,12 +1,14 @@
 package com.example.tribal_wars.Armies.Army_commands;
 
 
+import com.example.tribal_wars.Exceptions.Exc_invalid_request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/commands")
@@ -21,43 +23,26 @@ public class Command_controller {
     public ResponseEntity<Command> create_command(@RequestBody Command command){
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .header("Command created successfully.")
                 .body(this.command_service.save_command(command));
     }
     @GetMapping("/{id}")
     public ResponseEntity<Command> get_command_by_id(@PathVariable Long id){
-        return this.command_service.get_command_by_id(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        return ResponseEntity.ok(this.command_service.get_command_by_id(id));
     }
     @GetMapping("/all")
     public ResponseEntity<List<Command>> get_all_commands(){
-        List<Command> armies = this.command_service.get_all_commands();
-        String header = "Total-count";
-        if(armies.isEmpty())
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .header(header,"0")
-                    .build();
-        else return ResponseEntity
-                .status(HttpStatus.OK)
-                .header(header,String.valueOf(armies.size()))
-                .body(armies);
+        return Optional.ofNullable(this.command_service.get_all_commands())
+                .filter(players -> !players.isEmpty())
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Command> update_command(@PathVariable Long id, @RequestBody Command command){
-        return id.equals(command.getId())
-                ? command_service.put_command(id,command)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity
-                        .status(HttpStatus.NOT_FOUND)
-                        .header("Player with ID " + id + " not found.")
-                        .build())
-                : ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .header("Param ID does not match Body")
-                .build();
+    public ResponseEntity<Command> put_command(@PathVariable Long id, @RequestBody Command command){
+        return Optional.ofNullable(command)
+                .filter(c -> id.equals(c.getId()))
+                .map(c -> ResponseEntity.ok(this.command_service.put_command(id,c)))
+                .orElseThrow(() -> new Exc_invalid_request("Parameter ID does not match it's body."));
     }
 
 

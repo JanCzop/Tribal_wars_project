@@ -1,6 +1,7 @@
 package com.example.tribal_wars.Player;
 
 
+import com.example.tribal_wars.Exceptions.Exc_invalid_request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,42 +22,25 @@ public class Player_controller {
     public ResponseEntity<Player> create_player(@RequestBody Player player){
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .header("Player created successfully.")
                 .body(this.player_service.save_player(player));
     }
     @GetMapping("/{id}")
     public ResponseEntity<Player> get_player_by_id(@PathVariable Long id){
-        return this.player_service.get_player_by_id(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        return ResponseEntity.ok(this.player_service.get_player_by_id(id));
     }
     @GetMapping("/all")
     public ResponseEntity<List<Player>> get_all_players(){
-        List<Player> players = this.player_service.get_all_players();
-        String header = "Total-count";
-        if(players.isEmpty())
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .header(header,"0")
-                    .build();
-        else return ResponseEntity
-                .status(HttpStatus.OK)
-                .header(header,String.valueOf(players.size()))
-                .body(players);
+        return Optional.ofNullable(this.player_service.get_all_players())
+                .filter(players -> !players.isEmpty())
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.noContent().build());
     }
     @PutMapping("/{id}")
     public ResponseEntity<Player> put_player(@PathVariable Long id, @RequestBody Player player){
-        return id.equals(player.getId())
-                ? player_service.put_player(id,player)
-                    .map(ResponseEntity::ok)
-                    .orElseGet(() -> ResponseEntity
-                            .status(HttpStatus.NOT_FOUND)
-                            .header("Player with ID " + id + " not found.")
-                            .build())
-                : ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .header("Param ID does not match Body")
-                    .build();
+        return Optional.ofNullable(player)
+                .filter(p -> id.equals(p.getId()))
+                .map(p -> ResponseEntity.ok(this.player_service.put_player(id,p)))
+                .orElseThrow(() -> new Exc_invalid_request("Parameter ID does not match it's body."));
     }
 
     @DeleteMapping("/{id}")
