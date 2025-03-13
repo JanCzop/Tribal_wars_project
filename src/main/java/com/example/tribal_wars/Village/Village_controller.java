@@ -39,6 +39,8 @@ public class Village_controller {
     }
 
 
+
+
     @GetMapping("/{x}/{y}")
     public ResponseEntity<Village> get_village_by_id(@PathVariable Integer x, @PathVariable Integer y){
         return ResponseEntity.ok(this.village_service.get_village_by_id(new Coordinates(x,y)));
@@ -65,9 +67,12 @@ public class Village_controller {
         this.village_service.delete_village(new Coordinates(x,y));
         return ResponseEntity.noContent().build();
     }
+
     @PostMapping("/{x}/{y}/build")
     public ResponseEntity<Village> construct_building(@PathVariable Integer x, @PathVariable Integer y, @RequestBody String building_type_name){
         return ResponseEntity.ok(this.village_service.construct_building(
                 new Coordinates(x,y), Building_type.valueOf(building_type_name)));
     }
+
+
 }

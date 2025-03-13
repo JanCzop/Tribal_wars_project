@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -26,7 +27,18 @@ public class Army_service {
         player_repository = playerRepository;
     }
 
+    public void validate_foreign_keys(Army army) {
+        Optional.ofNullable(army.getVillage())
+                .ifPresent(village -> this.village_repository.findById(village.getCoordinates())
+                        .orElseThrow(() -> new Exc_item_not_found("Village with Coordinates " + village.getCoordinates() + " not found.")));
+
+        Optional.ofNullable(army.getPlayer())
+                .ifPresent(player -> this.player_repository.findById(player.getId())
+                        .orElseThrow(() -> new Exc_item_not_found("Player with ID " + player.getId() + " not found.")));
+    }
+
     public Army save_army(Army army){
+        validate_foreign_keys(army);
         return this.army_repository.save(army);
     }
     public void delete_army(Army.Army_id id){
@@ -40,13 +52,10 @@ public class Army_service {
         return new HashSet<>(this.army_repository.findAll());
     }
     public Army put_army(Army.Army_id id, Army army){
-        Village village = this.village_repository.findById(army.getVillage().getCoordinates())
-                .orElseThrow(() -> new Exc_item_not_found("Village with Coordinates " + army.getVillage().getCoordinates() + " not found."));
-        Player player = this.player_repository.findById(army.getPlayer().getId())
-                .orElseThrow(() -> new Exc_item_not_found("Player with ID " + id + " not found."));
+        validate_foreign_keys(army);
         return this.army_repository.findById(id).map(a -> {
-            a.setVillage(village);
-            a.setPlayer(player);
+            a.setVillage(army.getVillage());
+            a.setPlayer(army.getPlayer());
             a.setArmy_details(army.getArmy_details());
             return this.army_repository.save(a);
         }) .orElseThrow(() -> new Exc_item_not_found("Army with ID " + id + " not found."));
