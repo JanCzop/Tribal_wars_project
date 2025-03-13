@@ -21,9 +21,9 @@ public class Player_service {
         village_repository = villageRepository;
     }
     public void validate_foreign_keys(Player player) {
-        Optional.ofNullable(player.getVillages())  // Sprawdzamy, czy getVillages() nie zwróciło null
+        Optional.ofNullable(player.getVillages())
                 .ifPresent(villages -> villages.forEach(village ->
-                        Optional.ofNullable(village.getCoordinates())  // Sprawdzamy, czy getCoordinates() nie zwróciło null
+                        Optional.ofNullable(village.getCoordinates())
                                 .ifPresent(coordinates -> this.village_repository.findById(coordinates)
                                         .orElseThrow(() -> new Exc_item_not_found("Village with Coordinates " + coordinates + " not found."))
                                 )
