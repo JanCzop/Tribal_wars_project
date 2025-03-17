@@ -41,19 +41,18 @@ public class Village_service {
         this.construction_service = construction_service;
         this.recruitment_service = recruitment_service;
 
-    }
 
-
-    @PostConstruct
-    public void init_tester(){
         Coordinates test_id = new Coordinates(1,1);
         Village test_village = new Village(test_id);
+
         save_village(test_village);
         //System.out.println(test_village.getConstruction());
         this.construction_service.start_construction(test_village, Building_type.Blacksmith);
         //System.out.println(test_village.getConstruction());
         save_village(test_village);
+
     }
+
 
 
 
@@ -127,6 +126,7 @@ public class Village_service {
 
         resources_service.update_village_current_resource_state(village);
         construction_service.update_construction(village);
+        recruitment_service.update_recruitment(village);
 
         return village_repository.save(village);
     }

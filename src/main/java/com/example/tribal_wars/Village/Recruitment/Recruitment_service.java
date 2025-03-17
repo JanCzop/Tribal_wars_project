@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Iterator;
 
 @Service
 @Getter
@@ -37,17 +38,27 @@ public class Recruitment_service {
         return Army_details.get_army_map(army_details).values()
                 .stream().mapToInt(Integer::intValue).sum() / TEST_ACCELERATION;
     }
-    public void update_recruitment(){}
-    public void stop_recruitment(Village village, Recruitment recruitment){
-        this.recruitment_repository.delete(recruitment);
-        village.getRecruitment().remove(recruitment);
+    public void update_recruitment(Village village){
+        Iterator<Recruitment> recruitments = village.getRecruitment().iterator();
+        while(recruitments.hasNext()) {
+            Recruitment current = recruitments.next();
+            if(current.getRecruitment_end_time().isBefore(LocalDateTime.now())) {
+                merge_units(village,current.getArmy_details());
+                this.recruitment_repository.deleteById(current.getId());
+                recruitments.remove();
+            }
+        }
     }
-    public void end_recruitment(Village village, Recruitment recruitment){
-        merge_units(village, recruitment.getArmy_details());
-        stop_recruitment(village, recruitment);
-    }
+
     public void merge_units(Village village, Army_details recruited_army){
         Army_details updated_army = village.getLocal_army().getArmy_details().merge(recruited_army);
         village.getLocal_army().setArmy_details(updated_army);
     }
+
+
+    public void stop_recruitment(Village village, Recruitment recruitment){
+        this.recruitment_repository.delete(recruitment);
+        village.getRecruitment().remove(recruitment);
+    }
+
 }

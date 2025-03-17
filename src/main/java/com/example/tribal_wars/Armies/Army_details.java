@@ -15,16 +15,16 @@ import java.util.Map;
 @AllArgsConstructor
 @Getter @Setter
 public class Army_details {
-    private Integer spearman;
-    private Integer swordsman;
-    private Integer axeman;
-    private Integer archer;
-    private Integer scout;
-    private Integer light_cavalry;
-    private Integer heavy_cavalry;
-    private Integer ram;
-    private Integer catapult;
-    private Integer noble;
+    private Integer spearman = 0;
+    private Integer swordsman = 0;
+    private Integer axeman = 0;
+    private Integer archer = 0;
+    private Integer scout = 0;
+    private Integer light_cavalry = 0;
+    private Integer heavy_cavalry = 0;
+    private Integer ram = 0;
+    private Integer catapult = 0;
+    private Integer noble = 0;
 
     public static Map<Unit_type, Integer> get_army_map(Army_details army) {
         Map<Unit_type, Integer> army_map = new EnumMap<>(Unit_type.class);

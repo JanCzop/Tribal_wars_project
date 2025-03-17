@@ -26,17 +26,27 @@ public class Village {
         this.resources = new Village_resources();
         this.armies = new HashSet<>();
         assign_local_army();
+        assign_additional_army();
     }
     public Village(){
         this.buildings = new EnumMap<Building_type, Integer>(Building_type.class);
         this.resources = new Village_resources();
         this.armies = new HashSet<>();
         assign_local_army();
+        assign_additional_army();
     }
     private void assign_local_army(){
         this.local_army = new Army();
+        this.local_army.setArmy_details(new Army_details(){{setScout(2);}});
         this.local_army.setVillage(this);
     }
+    private void assign_additional_army(){
+        Army army = new Army();
+        army.setArmy_details(new Army_details(){{setHeavy_cavalry(1);}});
+        army.setVillage(this);
+        this.armies.add(army);
+    }
+
 
     @EmbeddedId
     private Coordinates coordinates;
