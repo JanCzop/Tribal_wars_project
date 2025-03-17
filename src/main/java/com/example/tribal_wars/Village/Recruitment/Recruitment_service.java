@@ -1,7 +1,6 @@
 package com.example.tribal_wars.Village.Recruitment;
 
 import com.example.tribal_wars.Armies.Army_details;
-import com.example.tribal_wars.Enums.Unit_type;
 import com.example.tribal_wars.Village.Village;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Map;
-import java.util.Optional;
 
 @Service
 @Getter
@@ -40,16 +37,17 @@ public class Recruitment_service {
         return Army_details.get_army_map(army_details).values()
                 .stream().mapToInt(Integer::intValue).sum() / TEST_ACCELERATION;
     }
-    public void check_recruitment(){}
+    public void update_recruitment(){}
     public void stop_recruitment(Village village, Recruitment recruitment){
         this.recruitment_repository.delete(recruitment);
         village.getRecruitment().remove(recruitment);
     }
     public void end_recruitment(Village village, Recruitment recruitment){
-        merge_units(village);
+        merge_units(village, recruitment.getArmy_details());
         stop_recruitment(village, recruitment);
     }
-    public void merge_units(Village village){
-
+    public void merge_units(Village village, Army_details recruited_army){
+        Army_details updated_army = village.getLocal_army().getArmy_details().merge(recruited_army);
+        village.getLocal_army().setArmy_details(updated_army);
     }
 }

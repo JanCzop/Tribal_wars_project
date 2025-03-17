@@ -51,7 +51,7 @@ public class Construction_service {
     private int calculate_construction_time(Building_type building, int level){
         return building.get_time_for_level(level)/TEST_ACCELERATION;
     }
-    public void check_construction(Village village){
+    public void update_construction(Village village){
         if(village.getConstruction() != null &&
                 village.getConstruction().getConstruction_end_time().isBefore(LocalDateTime.now()))
             end_construction(village);

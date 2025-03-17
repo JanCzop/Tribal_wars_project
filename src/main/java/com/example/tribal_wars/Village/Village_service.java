@@ -1,5 +1,6 @@
 package com.example.tribal_wars.Village;
 
+import com.example.tribal_wars.Armies.Army_details;
 import com.example.tribal_wars.Armies.Army_village.Army_repository;
 import com.example.tribal_wars.Enums.Building_type;
 import com.example.tribal_wars.Exceptions.Exc_building_cannot_be_constructed;
@@ -8,6 +9,7 @@ import com.example.tribal_wars.Player.Player_repository;
 import com.example.tribal_wars.Village.Construction.Construction_service;
 import com.example.tribal_wars.Village.Recruitment.Recruitment_service;
 import com.example.tribal_wars.Village.Resources.Resources_service;
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,19 +42,22 @@ public class Village_service {
         this.recruitment_service = recruitment_service;
 
     }
-/*
+
+
     @PostConstruct
     public void init_tester(){
         Coordinates test_id = new Coordinates(1,1);
         Village test_village = new Village(test_id);
         save_village(test_village);
-        System.out.println(test_village.getConstruction());
+        //System.out.println(test_village.getConstruction());
         this.construction_service.start_construction(test_village, Building_type.Blacksmith);
-        System.out.println(test_village.getConstruction());
+        //System.out.println(test_village.getConstruction());
         save_village(test_village);
     }
 
- */
+
+
+
 
 
 
@@ -121,7 +126,7 @@ public class Village_service {
         Village village = get_village_by_id(coordinates);
 
         resources_service.update_village_current_resource_state(village);
-        construction_service.check_construction(village);
+        construction_service.update_construction(village);
 
         return village_repository.save(village);
     }
@@ -133,6 +138,17 @@ public class Village_service {
                     this.construction_service.start_construction(v,type);
                     return v;
                 }).orElseThrow(() -> new Exc_building_cannot_be_constructed("Construction is not viable"));
+    }
+
+    @Transactional
+    public Village recruit_army(Coordinates coordinates, Army_details army_details){
+        return this.village_repository.findById(coordinates)
+                .map(v -> {
+                    this.recruitment_service.start_recruitment(v,army_details);
+                    return v;
+                })
+                .orElseThrow(() -> new Exc_item_not_found("Village with Coordinates " + coordinates + " not found."));
+
     }
 
 

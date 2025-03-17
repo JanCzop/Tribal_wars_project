@@ -3,6 +3,7 @@ package com.example.tribal_wars.Player;
 import com.example.tribal_wars.Armies.Army_village.Army;
 import com.example.tribal_wars.Armies.Army_commands.Command;
 import com.example.tribal_wars.Village.Village;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,7 @@ public class Player {
 
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
     @Getter @Setter
+    @JsonIgnore
     private Set<Village> villages;
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Army> armies;

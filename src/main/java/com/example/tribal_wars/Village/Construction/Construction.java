@@ -2,6 +2,7 @@ package com.example.tribal_wars.Village.Construction;
 
 import com.example.tribal_wars.Enums.Building_type;
 import com.example.tribal_wars.Village.Village;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,6 +31,7 @@ public class Construction {
             @JoinColumn(name = "village_x", referencedColumnName = "x"),
             @JoinColumn(name = "village_y", referencedColumnName = "y")
     })
+    @JsonIgnore
     private Village village;
 
     public Construction(Building_type construction_building_type, LocalDateTime construction_start_time, LocalDateTime construction_end_time, Village village) {

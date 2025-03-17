@@ -4,6 +4,7 @@ import com.example.tribal_wars.Armies.Army_details;
 import com.example.tribal_wars.Enums.Building_type;
 import com.example.tribal_wars.Enums.Unit_type;
 import com.example.tribal_wars.Village.Village;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 @Setter
 public class Recruitment {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Embedded
     private Army_details army_details;
@@ -31,6 +33,7 @@ public class Recruitment {
             @JoinColumn(name = "village_x", referencedColumnName = "x"),
             @JoinColumn(name = "village_y", referencedColumnName = "y")
     })
+    @JsonIgnore
     private Village village;
 
     public Recruitment(Army_details army_details, LocalDateTime recruitment_start_time, LocalDateTime recruitment_end_time, Village village) {

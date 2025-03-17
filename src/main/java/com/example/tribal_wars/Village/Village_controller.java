@@ -1,5 +1,6 @@
 package com.example.tribal_wars.Village;
 
+import com.example.tribal_wars.Armies.Army_details;
 import com.example.tribal_wars.Enums.Building_type;
 import com.example.tribal_wars.Exceptions.Exc_invalid_request;
 import lombok.Getter;
@@ -38,9 +39,6 @@ public class Village_controller {
 
     }
 
-
-
-
     @GetMapping("/{x}/{y}")
     public ResponseEntity<Village> get_village_by_id(@PathVariable Integer x, @PathVariable Integer y){
         return ResponseEntity.ok(this.village_service.get_village_by_id(new Coordinates(x,y)));
@@ -72,6 +70,11 @@ public class Village_controller {
     public ResponseEntity<Village> construct_building(@PathVariable Integer x, @PathVariable Integer y, @RequestBody String building_type_name){
         return ResponseEntity.ok(this.village_service.construct_building(
                 new Coordinates(x,y), Building_type.valueOf(building_type_name)));
+    }
+
+    @PostMapping("/{x}/{y}/recruit")
+    public ResponseEntity<Village> recruit_army(@PathVariable Integer x, @PathVariable Integer y, @RequestBody Army_details army_details){
+        return ResponseEntity.ok(this.village_service.recruit_army(new Coordinates(x,y), army_details));
     }
 
 

@@ -1,5 +1,6 @@
 package com.example.tribal_wars.Village;
 
+import com.example.tribal_wars.Armies.Army_details;
 import com.example.tribal_wars.Enums.Building_type;
 import com.example.tribal_wars.Enums.Specialty;
 import com.example.tribal_wars.Player.Player;
@@ -12,6 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,10 +24,18 @@ public class Village {
         this.coordinates = coordinates;
         this.buildings = new EnumMap<Building_type, Integer>(Building_type.class);
         this.resources = new Village_resources();
+        this.armies = new HashSet<>();
+        assign_local_army();
     }
     public Village(){
         this.buildings = new EnumMap<Building_type, Integer>(Building_type.class);
         this.resources = new Village_resources();
+        this.armies = new HashSet<>();
+        assign_local_army();
+    }
+    private void assign_local_army(){
+        this.local_army = new Army();
+        this.local_army.setVillage(this);
     }
 
     @EmbeddedId
@@ -39,7 +49,7 @@ public class Village {
 
     @OneToMany(mappedBy = "village", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Army> armies;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "local_army", unique = true)
     private Army local_army;
 
