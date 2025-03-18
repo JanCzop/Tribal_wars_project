@@ -1,0 +1,27 @@
+body {
+    background-color: black;
+    color: green;
+    font-family: monospace;
+    font-size: 18px;
+    padding: 20px;
+    overflow: hidden;
+}
+
+#prompt {
+    display: flex;
+    align-items: center;
+}
+#prompt-sign {
+    display: inline-block;
+}
+input {
+    background: black;
+    color: green;
+    border: none;
+    font-family: monospace;
+    font-size: 18px;
+    outline: none;
+    flex-grow: 1;
+    padding: 0;
+    margin: 0;
+}
