@@ -39,6 +39,13 @@ public class Player {
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Command> army_commands;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "players_authorities",
+            joinColumns = @JoinColumn(name = "player_id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id")
+    )
+    private Set<Authority> authorities;
 
 
 }

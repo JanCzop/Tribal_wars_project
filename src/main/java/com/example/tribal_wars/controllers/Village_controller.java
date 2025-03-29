@@ -35,6 +35,7 @@ public class Village_controller {
     @GetMapping("/{x}/{y}/update")
     public ResponseEntity<Village> update_village_state(@PathVariable Integer x, @PathVariable Integer y){
         return ResponseEntity.ok
+
                 (this.village_service.update_village_state(new Coordinates(x,y)));
 
     }
