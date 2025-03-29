@@ -14,24 +14,18 @@ import java.util.Set;
 
 @Entity
 @NoArgsConstructor
+@Getter @Setter
 public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
     private Long id;
 
-    @Getter @Setter
     private String username;
-    @Getter @Setter
     private String email;
 
-    @Getter String password;
-    public void setPassword(String raw_password) {
-        this.password = new BCryptPasswordEncoder().encode(raw_password);
-    }
+    private String password;
 
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
-    @Getter @Setter
     @JsonIgnore
     private Set<Village> villages;
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
