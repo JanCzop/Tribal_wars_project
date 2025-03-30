@@ -24,8 +24,8 @@ public class Custom_basic_authentication_filter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader != null && authHeader.startsWith("Basic ")) {
-            String base64Credentials = authHeader.substring(6);
-            String credentials = new String(Base64.getDecoder().decode(base64Credentials), StandardCharsets.UTF_8);
+            String base64_credentials = authHeader.substring(6);
+            String credentials = new String(Base64.getDecoder().decode(base64_credentials), StandardCharsets.UTF_8);
 
             String[] values = credentials.split(":", 2);
             if (values.length == 2) {
@@ -33,10 +33,10 @@ public class Custom_basic_authentication_filter extends OncePerRequestFilter {
                 String password = values[1];
 
                 Basic_authentication auth = new Basic_authentication(username, password);
-                Authentication providedAuth = this.manager.authenticate(auth);
+                Authentication provided_auth = this.manager.authenticate(auth);
 
-                if (providedAuth != null && providedAuth.isAuthenticated()) {
-                    SecurityContextHolder.getContext().setAuthentication(providedAuth);
+                if (provided_auth != null && provided_auth.isAuthenticated()) {
+                    SecurityContextHolder.getContext().setAuthentication(provided_auth);
                 } else {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     return;
