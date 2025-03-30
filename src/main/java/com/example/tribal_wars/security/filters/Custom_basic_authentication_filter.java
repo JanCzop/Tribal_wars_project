@@ -13,22 +13,36 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-@Component
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
 @AllArgsConstructor
 public class Custom_basic_authentication_filter extends OncePerRequestFilter {
     private final Basic_authentication_manager manager;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String username = request.getHeader("username");
-        String password = request.getHeader("password");
+        String authHeader = request.getHeader("Authorization");
 
-        if(username != null && password != null){
-            Basic_authentication auth = new Basic_authentication(username,password);
-            Authentication provided_auth = this.manager.authenticate(auth);
-            if(provided_auth != null && provided_auth.isAuthenticated())
-                SecurityContextHolder.getContext().setAuthentication(provided_auth);
-            else response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        if (authHeader != null && authHeader.startsWith("Basic ")) {
+            String base64Credentials = authHeader.substring(6);
+            String credentials = new String(Base64.getDecoder().decode(base64Credentials), StandardCharsets.UTF_8);
+
+            String[] values = credentials.split(":", 2);
+            if (values.length == 2) {
+                String username = values[0];
+                String password = values[1];
+
+                Basic_authentication auth = new Basic_authentication(username, password);
+                Authentication providedAuth = this.manager.authenticate(auth);
+
+                if (providedAuth != null && providedAuth.isAuthenticated()) {
+                    SecurityContextHolder.getContext().setAuthentication(providedAuth);
+                } else {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    return;
+                }
+            }
         }
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
     }
 }

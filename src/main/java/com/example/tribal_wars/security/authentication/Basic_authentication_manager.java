@@ -6,7 +6,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
-@Component
 @AllArgsConstructor
 public class Basic_authentication_manager implements AuthenticationManager {
     private final Basic_authentication_provider provider;

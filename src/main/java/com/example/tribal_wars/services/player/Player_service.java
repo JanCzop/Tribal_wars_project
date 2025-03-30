@@ -6,6 +6,7 @@ import com.example.tribal_wars.repositories.Player_repository;
 import com.example.tribal_wars.repositories.Village_repository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class Player_service {
         Player player = new Player();
         player.setUsername("John Doe");
         player.setEmail("john.doe@email.com");
-        player.setPassword("password");
+        player.setPassword(new BCryptPasswordEncoder().encode("password"));
         this.player_repository.save(player);
     }
 
