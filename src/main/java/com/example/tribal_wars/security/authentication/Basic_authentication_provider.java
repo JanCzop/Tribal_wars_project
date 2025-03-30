@@ -25,8 +25,7 @@ public class Basic_authentication_provider implements AuthenticationProvider {
 
         if(!password_encoder.matches
                 (basic_auth.getCredentials().toString(), user.getPassword()))
-        //if(basic_auth.getCredentials().toString().equals(user.getPassword()))
-            throw new BadCredentialsException("Invalid credentials."); // TODO: EXCEPTION HANDLE
+            throw new BadCredentialsException("Invalid credentials.");
         else {
             basic_auth.setAuthenticated(true);
             return basic_auth;
