@@ -1,6 +1,7 @@
 package com.example.tribal_wars.security.authentication;
 
 import com.example.tribal_wars.repositories.Player_repository;
+import com.example.tribal_wars.security.models.Custom_authority;
 import com.example.tribal_wars.security.models.Custom_user;
 import com.example.tribal_wars.security.repositories.User_details_repository;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -22,12 +24,12 @@ public class Basic_authentication_provider implements AuthenticationProvider {
         Basic_authentication basic_auth = (Basic_authentication) authentication;
 
         Custom_user user = (Custom_user) this.user_repository.loadUserByUsername(basic_auth.getName());
-
         if(!password_encoder.matches
                 (basic_auth.getCredentials().toString(), user.getPassword()))
             throw new BadCredentialsException("Invalid credentials.");
         else {
             basic_auth.setAuthenticated(true);
+            basic_auth.setAuthorities(user.getAuthorities());
             return basic_auth;
         }
     }

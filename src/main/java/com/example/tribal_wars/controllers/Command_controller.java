@@ -21,7 +21,7 @@ public class Command_controller {
         this.command_service = command_service;
     }
 
-    @PostMapping
+    @PostMapping("/admin/create")
     public ResponseEntity<Command> create_command(@RequestBody Command command){
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -31,7 +31,7 @@ public class Command_controller {
     public ResponseEntity<Command> get_command_by_id(@PathVariable Long id){
         return ResponseEntity.ok(this.command_service.get_command_by_id(id));
     }
-    @GetMapping("/all")
+    @GetMapping("/admin/all")
     public ResponseEntity<List<Command>> get_all_commands(){
         return Optional.ofNullable(this.command_service.get_all_commands())
                 .filter(players -> !players.isEmpty())
@@ -39,7 +39,7 @@ public class Command_controller {
                 .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/admin/update/{id}")
     public ResponseEntity<Command> put_command(@PathVariable Long id, @RequestBody Command command){
         return Optional.ofNullable(command)
                 .filter(c -> id.equals(c.getId()))
@@ -49,7 +49,7 @@ public class Command_controller {
 
 
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/delete/{id}")
     public ResponseEntity<Void> delete_command(@PathVariable Long id){
         this.command_service.delete_command(id);
         return ResponseEntity.noContent().build();

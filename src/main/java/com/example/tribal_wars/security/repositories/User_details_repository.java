@@ -16,7 +16,7 @@ import java.util.Optional;
 public class User_details_repository implements UserDetailsService {
     private final Player_repository player_repository;
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Player> user = this.player_repository.findByUsername(username);
+        Optional<Player> user = this.player_repository.findByUsernameEAGER(username);
         return user.map(Custom_user::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found."));
     }

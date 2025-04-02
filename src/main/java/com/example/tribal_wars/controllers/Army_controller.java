@@ -6,6 +6,7 @@ import com.example.tribal_wars.exceptions.Exc_invalid_request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -20,7 +21,7 @@ public class Army_controller {
         this.army_service = army_service;
     }
 
-    @PostMapping
+    @PostMapping("/admin/create")
     public ResponseEntity<Army> create_army(@RequestBody Army army){
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -32,7 +33,7 @@ public class Army_controller {
                 this.army_service.get_army_by_id(id));
 
     }
-    @GetMapping("/all")
+    @GetMapping("/admin/all")
     public ResponseEntity<Set<Army>> get_all_armies(){
         return Optional.ofNullable(this.army_service.get_all_armies())
                 .filter(armies -> !armies.isEmpty())
@@ -40,8 +41,8 @@ public class Army_controller {
                 .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Army> update_army(@PathVariable Long id, @RequestBody Army army){
+    @PutMapping("/admin/update/{id}")
+    public ResponseEntity<Army> put_army(@PathVariable Long id, @RequestBody Army army){
         return Optional.ofNullable(army)
                 .filter(a -> id.equals(a.getId()))
                 .map(a -> ResponseEntity.ok(this.army_service.put_army(id,a)))
@@ -50,7 +51,7 @@ public class Army_controller {
 
 
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/delete/{id}")
     public ResponseEntity<Void> delete_army
             (@PathVariable Long id){
         this.army_service.delete_army(id);

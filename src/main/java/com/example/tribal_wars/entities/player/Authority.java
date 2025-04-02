@@ -1,5 +1,6 @@
 package com.example.tribal_wars.entities.player;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,5 +19,6 @@ public class Authority {
     private String name;
 
     @ManyToMany(mappedBy = "authorities")
+    @JsonIgnore
     private Set<Player> players;
 }

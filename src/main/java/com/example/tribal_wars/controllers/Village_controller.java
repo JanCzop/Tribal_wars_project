@@ -24,7 +24,7 @@ public class Village_controller {
     }
 
 
-    @PostMapping
+    @PostMapping("admin/create")
     public ResponseEntity<Village> create_village(@RequestBody Village village){
         //village.setPlayer_owner(null); // TODO: CREATE CONCRETE EXCEPTION HANDLERS
         return ResponseEntity
@@ -46,22 +46,22 @@ public class Village_controller {
 
 
     }
-    @GetMapping("/all")
+    @GetMapping("/admin/all")
     public ResponseEntity<Set<Village>> get_all_villages(){
         return Optional.ofNullable(this.village_service.get_all_villages())
                 .filter(villages -> !villages.isEmpty())
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.noContent().build());
     }
-    @PutMapping("/{x}/{y}")
-    public ResponseEntity<Village> update_village(@PathVariable Integer x, @PathVariable Integer y, @RequestBody Village village){
+    @PutMapping("/admin/update/{x}/{y}")
+    public ResponseEntity<Village> put_village(@PathVariable Integer x, @PathVariable Integer y, @RequestBody Village village){
         Coordinates id = new Coordinates(x,y);
         return Optional.ofNullable(village)
                 .filter(v -> id.equals(v.getCoordinates()))
                 .map(v -> ResponseEntity.ok(this.village_service.put_village(id,v)))
                 .orElseThrow(() -> new Exc_invalid_request("Parameter ID does not match it's body."));
     }
-    @DeleteMapping("/{x}/{y}")
+    @DeleteMapping("/admin/delete/{x}/{y}")
     public ResponseEntity<Void> delete_village(@PathVariable Integer x, @PathVariable Integer y){
         this.village_service.delete_village(new Coordinates(x,y));
         return ResponseEntity.noContent().build();

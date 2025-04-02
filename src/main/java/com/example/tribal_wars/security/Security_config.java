@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import static org.springframework.security.web.util.matcher.RegexRequestMatcher.regexMatcher;
 
 @Configuration
 @AllArgsConstructor
@@ -20,7 +21,12 @@ public class Security_config {
             HttpSecurity http,
             Custom_basic_authentication_filter custom_basic_authentication_filter) throws Exception{
         http.
-                authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
+                authorizeHttpRequests(auth -> auth
+                        .requestMatchers(regexMatcher("^/api/.*/admin/.*$")).hasRole("ADMIN")
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/**").hasRole("PLAYER")
+                        .anyRequest().authenticated()
+                )
                 .addFilterBefore(custom_basic_authentication_filter, BasicAuthenticationFilter.class);
 
         return http.build();

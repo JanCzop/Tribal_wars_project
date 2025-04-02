@@ -13,6 +13,7 @@ public class Basic_authentication implements Authentication {
     private final String username;
     private final String password;
     private boolean authenticated = false;
+
     @Setter private Collection<? extends GrantedAuthority> authorities;
 
     @Override

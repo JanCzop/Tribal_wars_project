@@ -1,5 +1,6 @@
 package com.example.tribal_wars.services.player;
 
+import com.example.tribal_wars.entities.player.Authority;
 import com.example.tribal_wars.entities.player.Player;
 import com.example.tribal_wars.exceptions.Exc_item_not_found;
 import com.example.tribal_wars.repositories.Player_repository;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,10 +26,24 @@ public class Player_service {
 
     @PostConstruct
     public void player_tester(){
+        Player admin = new Player();
+        admin.setUsername("Admin");
+        admin.setEmail("admin.tribal@email.com");
+        admin.setPassword(new BCryptPasswordEncoder().encode("password"));
+        admin.setAuthorities(new HashSet<>());
+        Authority admin_auth = new Authority();
+        admin_auth.setName("ROLE_ADMIN");
+        admin.getAuthorities().add(admin_auth);
+        this.player_repository.save(admin);
+
         Player player = new Player();
-        player.setUsername("John Doe");
-        player.setEmail("john.doe@email.com");
+        player.setUsername("Player");
+        player.setEmail("player.tribal@email.com");
         player.setPassword(new BCryptPasswordEncoder().encode("password"));
+        player.setAuthorities(new HashSet<>());
+        Authority player_auth = new Authority();
+        player_auth.setName("ROLE_PLAYER");
+        player.getAuthorities().add(player_auth);
         this.player_repository.save(player);
     }
 
