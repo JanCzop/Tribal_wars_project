@@ -24,7 +24,7 @@ public class Security_config {
                 authorizeHttpRequests(auth -> auth
                         .requestMatchers(regexMatcher("^/api/.*/admin/.*$")).hasRole("ADMIN")
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/**").hasRole("PLAYER")
+                        .requestMatchers("/api/**").hasAnyRole("ADMIN","PLAYER")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(custom_basic_authentication_filter, BasicAuthenticationFilter.class);
