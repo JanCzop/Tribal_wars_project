@@ -18,12 +18,24 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.List;
 
 @AllArgsConstructor
 public class Custom_basic_authentication_filter extends OncePerRequestFilter {
     private final Basic_authentication_manager manager;
+
+    private static final List<String> PUBLIC_ENDPOINTS = List.of(
+            "/api/auth/register"
+    );
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
+        String path = request.getRequestURI();
+        if (PUBLIC_ENDPOINTS.stream().anyMatch(path::startsWith)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Basic ")) {
@@ -72,5 +84,8 @@ public class Custom_basic_authentication_filter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
+
+
+
 
 }

@@ -27,10 +27,12 @@ public class Army {
 
 
 
-
+    /*
     @ManyToOne
     @JoinColumn(name = "player_id", referencedColumnName = "id")
     private Player player;
+
+     */
 
     @Embedded
     @Column(nullable = false)

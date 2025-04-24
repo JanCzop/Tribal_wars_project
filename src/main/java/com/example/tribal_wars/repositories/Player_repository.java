@@ -13,4 +13,7 @@ public interface Player_repository extends JpaRepository<Player,Long> {
     Optional<Player> findByUsername(String username);
     @Query("SELECT p FROM Player p LEFT JOIN FETCH p.authorities WHERE p.username = :username")
     Optional<Player> findByUsernameEAGER(@Param("username") String username);
+    boolean existsByUsername(String username);
+    boolean existsByEmail(String email);
+
 }

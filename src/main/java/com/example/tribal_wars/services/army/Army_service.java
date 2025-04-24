@@ -31,10 +31,12 @@ public class Army_service {
         Optional.ofNullable(army.getVillage())
                 .ifPresent(village -> this.village_repository.findById(village.getCoordinates())
                         .orElseThrow(() -> new Exc_item_not_found("Village with Coordinates " + village.getCoordinates() + " not found.")));
-
+        /*
         Optional.ofNullable(army.getPlayer())
                 .ifPresent(player -> this.player_repository.findById(player.getId())
                         .orElseThrow(() -> new Exc_item_not_found("Player with ID " + player.getId() + " not found.")));
+
+         */
     }
 
     public Army save_army(Army army){
@@ -55,7 +57,7 @@ public class Army_service {
         validate_foreign_keys(army);
         return this.army_repository.findById(id).map(a -> {
             a.setVillage(army.getVillage());
-            a.setPlayer(army.getPlayer());
+            //a.setPlayer(army.getPlayer());
             a.setArmy_details(army.getArmy_details());
             return this.army_repository.save(a);
         }) .orElseThrow(() -> new Exc_item_not_found("Army with ID " + id + " not found."));

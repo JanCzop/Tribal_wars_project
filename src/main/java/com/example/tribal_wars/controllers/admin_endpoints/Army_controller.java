@@ -1,4 +1,4 @@
-package com.example.tribal_wars.controllers;
+package com.example.tribal_wars.controllers.admin_endpoints;
 
 import com.example.tribal_wars.services.army.Army_service;
 import com.example.tribal_wars.entities.army.Army;
@@ -6,14 +6,13 @@ import com.example.tribal_wars.exceptions.Exc_invalid_request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/armies")
+@RequestMapping("/api/admin/armies")
 public class Army_controller {
     private final Army_service army_service;
     @Autowired
@@ -21,7 +20,7 @@ public class Army_controller {
         this.army_service = army_service;
     }
 
-    @PostMapping("/admin/create")
+    @PostMapping("/create")
     public ResponseEntity<Army> create_army(@RequestBody Army army){
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -33,7 +32,7 @@ public class Army_controller {
                 this.army_service.get_army_by_id(id));
 
     }
-    @GetMapping("/admin/all")
+    @GetMapping("/all")
     public ResponseEntity<Set<Army>> get_all_armies(){
         return Optional.ofNullable(this.army_service.get_all_armies())
                 .filter(armies -> !armies.isEmpty())
@@ -41,7 +40,7 @@ public class Army_controller {
                 .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
-    @PutMapping("/admin/update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Army> put_army(@PathVariable Long id, @RequestBody Army army){
         return Optional.ofNullable(army)
                 .filter(a -> id.equals(a.getId()))
@@ -51,7 +50,7 @@ public class Army_controller {
 
 
 
-    @DeleteMapping("/admin/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete_army
             (@PathVariable Long id){
         this.army_service.delete_army(id);

@@ -21,17 +21,21 @@ public class Player {
     private Long id;
     @Column(unique = true, nullable = false)
     private String username;
+    @Column(unique = true, nullable = false)
     private String email;
-
+    @Column(nullable = false)
     private String password;
 
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Village> villages;
+    /*
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Army> armies;
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Command> army_commands;
+
+     */
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(

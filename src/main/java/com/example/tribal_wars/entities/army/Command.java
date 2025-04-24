@@ -33,10 +33,12 @@ public class Command {
     private Village target_village;
 
 
-
+/*
     @ManyToOne
     @JoinColumn(name = "player_id")
     private Player player;
+
+ */
 
     @Embedded
     @Column(nullable = false)

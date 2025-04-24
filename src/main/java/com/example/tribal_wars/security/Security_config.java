@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -20,10 +21,12 @@ public class Security_config {
     SecurityFilterChain securityFilterChain(
             HttpSecurity http,
             Custom_basic_authentication_filter custom_basic_authentication_filter) throws Exception{
-        http.
-                authorizeHttpRequests(auth -> auth
-                        .requestMatchers(regexMatcher("^/api/.*/admin/.*$")).hasRole("ADMIN")
+        http
+                .csrf(AbstractHttpConfigurer::disable) // WARNING!!!!
+                .authorizeHttpRequests(auth -> auth
+                                //.anyRequest().permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(regexMatcher("^/api/.*/admin/.*$")).hasRole("ADMIN")
                         .requestMatchers("/api/**").hasAnyRole("ADMIN","PLAYER")
                         .anyRequest().authenticated()
                 )

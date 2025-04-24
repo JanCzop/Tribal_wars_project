@@ -1,5 +1,6 @@
 package com.example.tribal_wars.entities.village;
 
+import com.example.tribal_wars.entities.army.Command;
 import com.example.tribal_wars.entities.player.Player;
 import com.example.tribal_wars.entities.army.embbed.Army_details;
 import com.example.tribal_wars.entities.army.Army;
@@ -26,28 +27,12 @@ public class Village {
         this.buildings = new EnumMap<Building_type, Integer>(Building_type.class);
         this.resources = new Village_resources();
         this.armies = new HashSet<>();
-        assign_local_army();
-        assign_additional_army();
     }
     public Village(){
         this.buildings = new EnumMap<Building_type, Integer>(Building_type.class);
         this.resources = new Village_resources();
         this.armies = new HashSet<>();
-        assign_local_army();
-        assign_additional_army();
     }
-    private void assign_local_army(){
-        this.local_army = new Army();
-        this.local_army.setArmy_details(new Army_details(){{setScout(2);}});
-        this.local_army.setVillage(this);
-    }
-    private void assign_additional_army(){
-        Army army = new Army();
-        army.setArmy_details(new Army_details(){{setHeavy_cavalry(1);}});
-        army.setVillage(this);
-        this.armies.add(army);
-    }
-
 
     @EmbeddedId
     private Coordinates coordinates;
@@ -56,13 +41,15 @@ public class Village {
     @JoinColumn(name = "player_id")
     private Player player;
 
-
-
+    private String name;
     @OneToMany(mappedBy = "village", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Army> armies;
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "local_army", unique = true)
     private Army local_army;
+
+    @OneToMany(mappedBy = "origin_village", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Command> army_commands;
 
 
     @ElementCollection
@@ -87,6 +74,6 @@ public class Village {
     @OneToMany(mappedBy = "village", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Recruitment> recruitment;
 
-    private Specialty specialty;
+    private Specialty specialty = Specialty.None;
 
 }

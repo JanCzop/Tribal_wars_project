@@ -1,4 +1,4 @@
-package com.example.tribal_wars.controllers;
+package com.example.tribal_wars.controllers.admin_endpoints;
 
 import com.example.tribal_wars.entities.army.embbed.Army_details;
 import com.example.tribal_wars.entities.village.Village;
@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/villages")
+@RequestMapping("/api/admin/villages")
 public class Village_controller {
     private final Village_service village_service;
     @Autowired
@@ -24,9 +24,8 @@ public class Village_controller {
     }
 
 
-    @PostMapping("admin/create")
+    @PostMapping("/create")
     public ResponseEntity<Village> create_village(@RequestBody Village village){
-        //village.setPlayer_owner(null); // TODO: CREATE CONCRETE EXCEPTION HANDLERS
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(this.village_service.save_village(village));
@@ -46,14 +45,14 @@ public class Village_controller {
 
 
     }
-    @GetMapping("/admin/all")
+    @GetMapping("/all")
     public ResponseEntity<Set<Village>> get_all_villages(){
         return Optional.ofNullable(this.village_service.get_all_villages())
                 .filter(villages -> !villages.isEmpty())
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.noContent().build());
     }
-    @PutMapping("/admin/update/{x}/{y}")
+    @PutMapping("/update/{x}/{y}")
     public ResponseEntity<Village> put_village(@PathVariable Integer x, @PathVariable Integer y, @RequestBody Village village){
         Coordinates id = new Coordinates(x,y);
         return Optional.ofNullable(village)
@@ -61,7 +60,7 @@ public class Village_controller {
                 .map(v -> ResponseEntity.ok(this.village_service.put_village(id,v)))
                 .orElseThrow(() -> new Exc_invalid_request("Parameter ID does not match it's body."));
     }
-    @DeleteMapping("/admin/delete/{x}/{y}")
+    @DeleteMapping("/delete/{x}/{y}")
     public ResponseEntity<Void> delete_village(@PathVariable Integer x, @PathVariable Integer y){
         this.village_service.delete_village(new Coordinates(x,y));
         return ResponseEntity.noContent().build();
