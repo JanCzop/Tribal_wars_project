@@ -35,16 +35,6 @@ public class Player_service {
         admin_auth.setName("ROLE_ADMIN");
         admin.getAuthorities().add(admin_auth);
         this.player_repository.save(admin);
-
-        Player player = new Player();
-        player.setUsername("Player");
-        player.setEmail("player.tribal@email.com");
-        player.setPassword(new BCryptPasswordEncoder().encode("password"));
-        player.setAuthorities(new HashSet<>());
-        Authority player_auth = new Authority();
-        player_auth.setName("ROLE_PLAYER");
-        player.getAuthorities().add(player_auth);
-        this.player_repository.save(player);
     }
 
 

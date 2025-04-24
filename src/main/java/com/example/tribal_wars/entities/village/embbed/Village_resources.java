@@ -11,21 +11,17 @@ import java.time.temporal.ChronoUnit;
 @Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
+@Getter @Setter
 public class Village_resources {
 
     private Integer current_gold = 0;
     private Integer current_iron = 0;
     private Integer current_stone = 0;
     private Integer current_wood = 0;
-    @Setter
     private Integer resources_capacity = 1000;
-    @Setter
-    private Integer cache_capacity = 1000; // TODO: capacity is TEMP
-    @Setter
+    private Integer cache_capacity = 1000;
     private Integer gold_capacity = 1000;
     @Column(nullable = false)
-    @Setter
     private LocalDateTime resource_last_update = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS); //truncatedTo(ChronoUnit.HOURS);
     // TODO: NOW RESOURCES UPDATE EVERY INTERVAL FOR EACH VILLAGE TIMER INDIVIDUALLY, IT WILL BE NECCESSARY TO HANDLE IT LATER
 
@@ -64,7 +60,6 @@ public class Village_resources {
 
     private static final int MINIMUM_RESOURCES = 0;
     private int validate_current_resource(int current_resource, int capacity){
-        System.out.println(current_resource);
         if(current_resource <= MINIMUM_RESOURCES) return MINIMUM_RESOURCES;
         else return Math.min(current_resource, capacity);
     }

@@ -1,5 +1,6 @@
 package com.example.tribal_wars.entities.village;
 
+import com.example.tribal_wars.config.Buildings_config;
 import com.example.tribal_wars.entities.army.Command;
 import com.example.tribal_wars.entities.player.Player;
 import com.example.tribal_wars.entities.army.embbed.Army_details;
@@ -12,6 +13,7 @@ import com.example.tribal_wars.entities.village.embbed.Recruitment;
 import com.example.tribal_wars.entities.village.embbed.Village_resources;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.EnumMap;
@@ -21,18 +23,9 @@ import java.util.Set;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor
 public class Village {
-    public Village(Coordinates coordinates){
-        this.coordinates = coordinates;
-        this.buildings = new EnumMap<Building_type, Integer>(Building_type.class);
-        this.resources = new Village_resources();
-        this.armies = new HashSet<>();
-    }
-    public Village(){
-        this.buildings = new EnumMap<Building_type, Integer>(Building_type.class);
-        this.resources = new Village_resources();
-        this.armies = new HashSet<>();
-    }
+
 
     @EmbeddedId
     private Coordinates coordinates;
@@ -73,7 +66,8 @@ public class Village {
     private Construction construction;
     @OneToMany(mappedBy = "village", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Recruitment> recruitment;
-
+    @Enumerated(EnumType.STRING)
     private Specialty specialty = Specialty.None;
+
 
 }

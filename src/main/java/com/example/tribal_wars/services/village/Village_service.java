@@ -39,17 +39,6 @@ public class Village_service {
         this.resources_service = resources_service;
         this.construction_service = construction_service;
         this.recruitment_service = recruitment_service;
-
-
-        Coordinates test_id = new Coordinates(1,1);
-        Village test_village = new Village(test_id);
-
-        save_village(test_village);
-        //System.out.println(test_village.getConstruction());
-        this.construction_service.start_construction(test_village, Building_type.Blacksmith);
-        //System.out.println(test_village.getConstruction());
-        save_village(test_village);
-
     }
 
 

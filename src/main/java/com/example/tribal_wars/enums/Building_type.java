@@ -23,7 +23,7 @@ public enum Building_type {
     private final Map<Resource, Integer> base_cost;
     private final int base_construction_time;
 
-    // TODO: ITS STATIC FOR ALL ENUMS NOW BUT CAN BE PARAMETRIZED EACH INDIVIDUALLY
+    // TODO: IT'S STATIC FOR ALL ENUMS NOW BUT CAN BE PARAMETRIZED EACH INDIVIDUALLY
     private static final double COST_MULTIPLIER = 1.5;
     private static final double TIME_MULTIPLIER = 2.1;
 

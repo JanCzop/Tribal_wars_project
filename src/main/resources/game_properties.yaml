@@ -4,3 +4,7 @@ game:
   buildings:
     resource_production_per_level: 5
     resource_production_extra_bonus: 0.1
+    granary_capacity_per_level: 100
+  village:
+    base_resource_capacity: 900
+    base_gold_capacity: 100
