@@ -34,6 +34,7 @@ public class Village {
     @JoinColumn(name = "player_id")
     private Player player;
 
+    @Column(unique = true)
     private String name;
     @OneToMany(mappedBy = "village", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Army> armies;

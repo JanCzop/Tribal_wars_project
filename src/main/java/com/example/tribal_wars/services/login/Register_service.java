@@ -30,7 +30,7 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class Register_service {
-    private static final String DEFAULT_PLAYER_AUTHORITY = "PLAYER";
+    private static final String DEFAULT_PLAYER_AUTHORITY = "ROLE_PLAYER";
 
     private final Player_repository player_repository;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -41,15 +41,15 @@ public class Register_service {
 
     @Transactional
     public Player register(Register_DTO register_data){
-        if (player_repository.existsByUsername(register_data.getUsername()))
+        if (player_repository.existsByUsername(register_data.username()))
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username is already taken");
-        if (player_repository.existsByEmail(register_data.getEmail()))
+        if (player_repository.existsByEmail(register_data.email()))
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email is already registered");
         // Player
         Player player = new Player();
-        player.setUsername(register_data.getUsername());
-        player.setEmail(register_data.getEmail());
-        player.setPassword(passwordEncoder.encode(register_data.getPassword()));
+        player.setUsername(register_data.username());
+        player.setEmail(register_data.email());
+        player.setPassword(passwordEncoder.encode(register_data.password()));
         // Authority
         player.setAuthorities(new HashSet<>());
         Authority authority = new Authority();

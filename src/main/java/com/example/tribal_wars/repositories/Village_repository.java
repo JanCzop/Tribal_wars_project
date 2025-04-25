@@ -24,4 +24,9 @@ public interface Village_repository extends JpaRepository<Village, Coordinates> 
 
     boolean existsByCoordinates(Coordinates coordinates);
 
+    boolean existsByCoordinatesAndPlayer_Username(Coordinates coordinates, String username);
+
+
+
+
 }

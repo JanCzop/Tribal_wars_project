@@ -108,6 +108,16 @@ public class Village_service {
                 }).orElseThrow(() -> new Exc_item_not_found("Village with Coordinates " + coordinates + " not found."));
     }
 
+    //////////////////////////////
+    @Transactional
+    public Village change_village_name(int x, int y, String new_name) {
+        Coordinates coordinates = new Coordinates(x, y);
+        Village village = village_repository.findById(coordinates)
+                .orElseThrow(() -> new Exc_item_not_found("Village with coordinates " + coordinates + " not found."));
+        village.setName(new_name);
+        return village_repository.save(village);
+    }
+
     @Transactional
     public Village update_village_state(Coordinates coordinates){
         Village village = get_village_by_id(coordinates);
