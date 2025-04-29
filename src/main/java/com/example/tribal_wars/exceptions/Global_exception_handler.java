@@ -31,4 +31,13 @@ public class Global_exception_handler {
         );
         return ResponseEntity.badRequest().body(errors);
     }
+    @ExceptionHandler(Exc_not_enough_resources.class)
+    public ResponseEntity<String> handle_not_enough_resources(Exc_not_enough_resources exc){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exc.getMessage());
+    }
+    @ExceptionHandler(Exc_recruitment_queue_full.class)
+    public ResponseEntity<String> handleExcRecruitmentQueueFull(Exc_recruitment_queue_full ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
 }

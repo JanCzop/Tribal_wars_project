@@ -1,6 +1,7 @@
 package com.example.tribal_wars.entities.village.embbed;
 
 import com.example.tribal_wars.enums.Resource;
+import com.example.tribal_wars.exceptions.Exc_not_enough_resources;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.*;
@@ -40,14 +41,41 @@ public class Village_resources {
                 '}';
     }
 
+    public int get_resource(Resource resource_type) {
+        return switch (resource_type) {
+            case Gold -> this.current_gold;
+            case Iron -> this.current_iron;
+            case Stone -> this.current_stone;
+            case Wood -> this.current_wood;
+        };
+    }
+
+
     public void update_resource(int resource_amount, Resource resource_type){
         switch (resource_type){
-            case Gold -> setCurrent_gold(this.current_gold + resource_amount);
-            case Iron -> setCurrent_iron(this.current_iron + resource_amount);
-            case Stone -> setCurrent_stone(this.current_stone + resource_amount);
-            case Wood -> setCurrent_wood(this.current_wood + resource_amount);
+            case Gold -> {
+                int newVal = this.current_gold + resource_amount;
+                if (newVal < 0) throw new Exc_not_enough_resources("Not enough gold");
+                setCurrent_gold(newVal);
+            }
+            case Iron -> {
+                int newVal = this.current_iron + resource_amount;
+                if (newVal < 0) throw new Exc_not_enough_resources("Not enough iron");
+                setCurrent_iron(newVal);
+            }
+            case Stone -> {
+                int newVal = this.current_stone + resource_amount;
+                if (newVal < 0) throw new Exc_not_enough_resources("Not enough stone");
+                setCurrent_stone(newVal);
+            }
+            case Wood -> {
+                int newVal = this.current_wood + resource_amount;
+                if (newVal < 0) throw new Exc_not_enough_resources("Not enough wood");
+                setCurrent_wood(newVal);
+            }
         }
     }
+
     public void update_all_resources_specifically(int wood, int stone, int iron, int gold) {
         update_resource(wood, Resource.Wood);
         update_resource(stone, Resource.Stone);

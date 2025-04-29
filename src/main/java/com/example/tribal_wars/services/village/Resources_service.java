@@ -2,16 +2,20 @@ package com.example.tribal_wars.services.village;
 
 import com.example.tribal_wars.config.Buildings_config;
 import com.example.tribal_wars.config.Game_config;
+import com.example.tribal_wars.entities.army.embbed.Army_details;
 import com.example.tribal_wars.enums.Building_type;
 import com.example.tribal_wars.enums.Resource;
 import com.example.tribal_wars.entities.village.Village;
+import com.example.tribal_wars.exceptions.Exc_not_enough_resources;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -65,5 +69,43 @@ public class Resources_service {
                 Building_type.Mine, Resource.Iron,
                 Building_type.Marketplace, Resource.Gold);
     }
+
+
+    public void ensure_affordable_and_pay(Village village, Building_type building, int level) {
+        Map<Resource, Integer> costs = building.get_costs_for_level(level);
+        for (Map.Entry<Resource, Integer> entry : costs.entrySet()) {
+            int current = village.getResources().get_resource(entry.getKey());
+            if (current < entry.getValue())
+                throw new Exc_not_enough_resources("Not enough " + entry.getKey().name().toLowerCase());
+        }
+        costs.forEach((resource, amount) -> village.getResources().update_resource(-amount, resource));
+    }
+
+    public void ensure_affordable_and_pay(Village village, Army_details army) {
+        Map<Resource, Integer> total_cost = army.get_total_cost();
+        List<Resource> missing = new ArrayList<>();
+        for (Map.Entry<Resource, Integer> entry : total_cost.entrySet()) {
+            int available = village.getResources().get_resource(entry.getKey());
+            if (available < entry.getValue()) {
+                missing.add(entry.getKey());
+            }
+        }
+        if (!missing.isEmpty()) {
+            if (missing.size() == 1) {
+                Resource res = missing.get(0);
+                throw switch (res) {
+                    case Wood -> new Exc_not_enough_resources("Not enough wood for recruitment");
+                    case Stone -> new Exc_not_enough_resources("Not enough stone for recruitment");
+                    case Iron -> new Exc_not_enough_resources("Not enough iron for recruitment");
+                    case Gold -> new Exc_not_enough_resources("Not enough gold for recruitment");
+                };
+            } else throw new Exc_not_enough_resources("Not enough resources for recruitment");
+
+        }
+        total_cost.forEach((res, amount) -> village.getResources().update_resource(-amount, res));
+    }
+
+
+
 
 }

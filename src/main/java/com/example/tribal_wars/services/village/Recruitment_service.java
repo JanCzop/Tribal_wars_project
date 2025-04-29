@@ -19,6 +19,8 @@ public class Recruitment_service {
     private static final int TEST_ACCELERATION = 10;
     // TODO: MOVE PENALTY VALUE TO PROPERTIES
     private static final double MANY_UNITS_TYPE_PENALTY = 0.1;
+    // TODO: RECRUITMENT QUEUE IS NOW INF
+    private static final int MAX_RECRUITMENT_QUEUE = Integer.MAX_VALUE;
 
     private final Recruitment_repository recruitment_repository;
     @Autowired
@@ -26,7 +28,9 @@ public class Recruitment_service {
         this.recruitment_repository = recruitment_repository;
     }
 
-
+    public boolean is_recruitment_viable(Village village){
+        return village.getRecruitment().size() <= MAX_RECRUITMENT_QUEUE;
+    }
     public void start_recruitment(Village village, Army_details army_details){
         LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         LocalDateTime recruitment_end = now.plus
@@ -37,7 +41,7 @@ public class Recruitment_service {
     }
     private int calculate_recruitment_time(Army_details army_details){
         // TODO: RECRUITMENT TIME WILL BE EXECUTED WITH PERCENTAGE PENALTY FOR EACH TYPE (PROTOTYPE)
-        return Army_details.get_army_map(army_details).values()
+        return army_details.get_army_map().values()
                 .stream().mapToInt(Integer::intValue).sum() / TEST_ACCELERATION;
     }
     public void update_recruitment(Village village){

@@ -1,5 +1,6 @@
 package com.example.tribal_wars.entities.army.embbed;
 
+import com.example.tribal_wars.enums.Resource;
 import com.example.tribal_wars.enums.Unit_type;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 @Embeddable
+@Access(AccessType.FIELD)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
@@ -26,19 +28,19 @@ public class Army_details {
     private Integer catapult = 0;
     private Integer noble = 0;
 
-    public static Map<Unit_type, Integer> get_army_map(Army_details army) {
+    public Map<Unit_type, Integer> get_army_map() {
         Map<Unit_type, Integer> army_map = new EnumMap<>(Unit_type.class);
 
-        army_map.put(Unit_type.Spearman, army.getSpearman() != null ? army.getSpearman() : 0);
-        army_map.put(Unit_type.Swordsman, army.getSwordsman() != null ? army.getSwordsman() : 0);
-        army_map.put(Unit_type.Axeman, army.getAxeman() != null ? army.getAxeman() : 0);
-        army_map.put(Unit_type.Archer, army.getArcher() != null ? army.getArcher() : 0);
-        army_map.put(Unit_type.Scout, army.getScout() != null ? army.getScout() : 0);
-        army_map.put(Unit_type.Light_cavalry, army.getLight_cavalry() != null ? army.getLight_cavalry() : 0);
-        army_map.put(Unit_type.Heavy_cavalry, army.getHeavy_cavalry() != null ? army.getHeavy_cavalry() : 0);
-        army_map.put(Unit_type.Ram, army.getRam() != null ? army.getRam() : 0);
-        army_map.put(Unit_type.Catapult, army.getCatapult() != null ? army.getCatapult() : 0);
-        army_map.put(Unit_type.Noble, army.getNoble() != null ? army.getNoble() : 0);
+        army_map.put(Unit_type.Spearman, this.getSpearman() != null ? this.getSpearman() : 0);
+        army_map.put(Unit_type.Swordsman, this.getSwordsman() != null ? this.getSwordsman() : 0);
+        army_map.put(Unit_type.Axeman, this.getAxeman() != null ? this.getAxeman() : 0);
+        army_map.put(Unit_type.Archer, this.getArcher() != null ? this.getArcher() : 0);
+        army_map.put(Unit_type.Scout, this.getScout() != null ? this.getScout() : 0);
+        army_map.put(Unit_type.Light_cavalry, this.getLight_cavalry() != null ? this.getLight_cavalry() : 0);
+        army_map.put(Unit_type.Heavy_cavalry, this.getHeavy_cavalry() != null ? this.getHeavy_cavalry() : 0);
+        army_map.put(Unit_type.Ram, this.getRam() != null ? this.getRam() : 0);
+        army_map.put(Unit_type.Catapult, this.getCatapult() != null ? this.getCatapult() : 0);
+        army_map.put(Unit_type.Noble, this.getNoble() != null ? this.getNoble() : 0);
 
         return army_map;
     }
@@ -58,6 +60,22 @@ public class Army_details {
                 (this.noble != null ? this.noble : 0) + (other.noble != null ? other.noble : 0)
         );
     }
+
+    public Map<Resource, Integer> get_total_cost() {
+        Map<Resource, Integer> totalCost = new EnumMap<>(Resource.class);
+
+        for (Map.Entry<Unit_type, Integer> entry : get_army_map().entrySet()) {
+            Unit_type unit = entry.getKey();
+            int count = entry.getValue();
+
+            unit.getCost().forEach((resource, costPerUnit) -> {
+                totalCost.merge(resource, costPerUnit * count, Integer::sum);
+            });
+        }
+
+        return totalCost;
+    }
+
 
 
     @Override

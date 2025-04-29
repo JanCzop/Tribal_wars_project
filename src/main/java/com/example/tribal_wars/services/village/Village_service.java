@@ -1,5 +1,6 @@
 package com.example.tribal_wars.services.village;
 
+import com.example.tribal_wars.exceptions.Exc_recruitment_queue_full;
 import com.example.tribal_wars.repositories.Army_repository;
 import com.example.tribal_wars.entities.army.embbed.Army_details;
 import com.example.tribal_wars.entities.village.Village;
@@ -110,10 +111,8 @@ public class Village_service {
 
     //////////////////////////////
     @Transactional
-    public Village change_village_name(int x, int y, String new_name) {
-        Coordinates coordinates = new Coordinates(x, y);
-        Village village = village_repository.findById(coordinates)
-                .orElseThrow(() -> new Exc_item_not_found("Village with coordinates " + coordinates + " not found."));
+    public Village change_village_name(Coordinates coordinates, String new_name) {
+        Village village = get_village_by_id(coordinates);
         village.setName(new_name);
         return village_repository.save(village);
     }
@@ -129,24 +128,30 @@ public class Village_service {
         return village_repository.save(village);
     }
     @Transactional
-    public Village construct_building(Coordinates coordinates, Building_type type){
-        return this.village_repository.findById(coordinates)
-                .filter(v -> this.construction_service.is_construction_viable(type,v))
-                .map(v -> {
-                    this.construction_service.start_construction(v,type);
-                    return v;
-                }).orElseThrow(() -> new Exc_building_cannot_be_constructed("Construction is not viable"));
+    public Village construct_building(Coordinates coordinates, Building_type type) {
+        Village village = get_village_by_id(coordinates);
+        if (!this.construction_service.is_construction_viable(type, village)) {
+            throw new Exc_building_cannot_be_constructed("Construction is not viable");
+        }
+
+        resources_service.ensure_affordable_and_pay(village, type,
+                village.getBuildings().getOrDefault(type, 0) + 1);
+        this.construction_service.start_construction(village, type);
+        return village;
     }
 
     @Transactional
-    public Village recruit_army(Coordinates coordinates, Army_details army_details){
-        return this.village_repository.findById(coordinates)
-                .map(v -> {
-                    this.recruitment_service.start_recruitment(v,army_details);
-                    return v;
-                })
-                .orElseThrow(() -> new Exc_item_not_found("Village with Coordinates " + coordinates + " not found."));
+    public Village recruit_army(Coordinates coordinates, Army_details army_details) {
+        Village village = get_village_by_id(coordinates);
 
+        if (!recruitment_service.is_recruitment_viable(village)) {
+            throw new Exc_recruitment_queue_full("Recruitment queue is full");
+        }
+
+        resources_service.ensure_affordable_and_pay(village, army_details);
+        recruitment_service.start_recruitment(village, army_details);
+
+        return village;
     }
 
 
